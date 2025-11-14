@@ -1,0 +1,23 @@
+.card {
+
+  border: 1px solid var(--stone-10);
+  border-radius: 3px;
+  margin: 0.5rem;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 4px 4px 0 var(--stone-10);
+
+  &:hover {
+    box-shadow: 8px 8px 0 var(--stone-10);
+    transform: scale(1.01);
+  }
+
+  article {
+    padding: var(--size-fluid-3);
+  }
+
+  footer {
+    padding: var(--size-fluid-2) var(--size-fluid-1);
+    background-color: var(--stone-1);
+    border-top: 1px solid var(--stone-5);
+  }
+}

@@ -1,0 +1,17 @@
+GET http://localhost:3001/api/cards?sessionId=1
+
+
+# POST http://localhost:3001/api/cards
+# Content-Type: application/json
+
+# {"sessionId": "1", "content": "test", "columnType": "went_well", "position": 1}
+
+
+# PUT http://localhost:3001/api/cards/3
+# Content-Type: application/json
+
+# {"content": "test again!", "columnType": "went_well", "position": 1}
+
+
+
+# DELETE http://localhost:3001/api/cards/3

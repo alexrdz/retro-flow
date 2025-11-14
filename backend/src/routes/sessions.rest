@@ -1,0 +1,16 @@
+# GET http://localhost:3001/api/session/:id
+
+# POST http://localhost:3001/api/session
+# Content-Type: application/json
+
+# {"name": "test"}
+
+# DELETE http://localhost:3001/api/session/:id
+
+# PUT http://localhost:3001/api/session/:id
+# Content-Type: application/json
+
+# {"name": "test"}
+
+
+GET http://localhost:3001/api/sessions

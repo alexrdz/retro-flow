@@ -1,0 +1,25 @@
+.column {
+  h2 {
+    font-size: var(--font-size-4);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    margin-bottom: var(--space-4);
+  }
+}
+
+.cardAdded {
+  /* animation: border glow ease in and out */
+  animation: glow 0.5s ease-in-out;
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 0 0 var(--stone-10);
+  }
+  50% {
+    box-shadow: 0 0 0 10px var(--stone-12);
+  }
+  100% {
+    box-shadow: 0 0 0 0 var(--stone-10);
+  }
+}
