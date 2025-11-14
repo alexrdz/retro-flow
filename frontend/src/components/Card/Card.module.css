@@ -1,5 +1,4 @@
 .card {
-
   border: 1px solid var(--stone-10);
   border-radius: 3px;
   margin: 0.5rem;
@@ -20,4 +19,17 @@
     background-color: var(--stone-1);
     border-top: 1px solid var(--stone-5);
   }
+}
+
+
+.went_well {
+  --pill-bg-color: var(--pink-3);
+}
+
+.improve {
+  --pill-bg-color: var(--blue-3);
+}
+
+.actions {
+  --pill-bg-color: var(--green-3);
 }

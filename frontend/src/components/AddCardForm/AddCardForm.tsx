@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form"
 import type { CardFormData, ColumnType, Card } from "../../types"
 import styles from "./AddCardForm.module.css"
 import { createCard } from "../../services/card-service"
+import { useState } from "react"
 
 interface AddCardFormProps {
     columnType: ColumnType
@@ -9,6 +10,7 @@ interface AddCardFormProps {
 }
 
 export default function AddCardForm({columnType, onCardCreated}: AddCardFormProps) {
+  const [loading, setLoading] = useState(false)
     const { register, handleSubmit, reset, formState: { errors } } = useForm<CardFormData>()
 
     async function onFormSubmit(data: CardFormData) {
@@ -21,15 +23,17 @@ export default function AddCardForm({columnType, onCardCreated}: AddCardFormProp
       }
 
       try {
+        setLoading(true)
         const createdCard = await createCard(newCard)
 
         if(createdCard.id) {
           onCardCreated()
+          reset()
         }
       } catch (error) {
         console.error(error)
       } finally {
-        reset()
+        setLoading(false)
       }
     }
 
@@ -42,7 +46,7 @@ export default function AddCardForm({columnType, onCardCreated}: AddCardFormProp
               placeholder="Add a card..."
             />
             {errors.content && <p>{errors.content.message}</p>}
-            <button type="submit">Add Card</button>
+            <button type="submit" disabled={loading}>Add Card</button>
         </form>
     )
 }

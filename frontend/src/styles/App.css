@@ -1,3 +1,13 @@
+html, body {
+  block-size: 100%;
+  background-color: var(--stone-1);
+
+  #root {
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+  }
+}
 .column-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
