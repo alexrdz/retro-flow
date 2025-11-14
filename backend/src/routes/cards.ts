@@ -9,10 +9,18 @@ router.post('/', async (req: express.Request, res: express.Response) => {
     try {
     const { sessionId, content, columnType, position }: CreateCardRequest = req.body;
 
+    const maxPositionResult = await turso.execute({
+      sql: `SELECT MAX(position) as max_position FROM cards WHERE session_id = ? AND column_type = ?`,
+      args: [sessionId, columnType]
+    });
+
+    const maxPosition = maxPositionResult.rows[0]?.max_position || 0;
+    const newPosition = Number(maxPosition) + 1;
+
     const timestamp = new Date().toISOString();
     const result = await turso.execute(
       'INSERT INTO cards (session_id, content, column_type, position, created_at) VALUES (?, ?, ?, ?, ?)',
-      [sessionId, content, columnType, position, timestamp]
+      [sessionId, content, columnType, newPosition, timestamp]
     );
 
     console.log(result);
@@ -23,7 +31,7 @@ router.post('/', async (req: express.Request, res: express.Response) => {
       sessionId,
       content,
       columnType,
-      position,
+      position: newPosition,
       createdAt: timestamp
     };
 
