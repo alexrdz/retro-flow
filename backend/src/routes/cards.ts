@@ -116,20 +116,16 @@ router.get('/', async (req: express.Request, res: express.Response) => {
     }
 
     const data = await turso.execute("SELECT * FROM cards WHERE session_id = ?", [String(sessionId)]);
-
-    if (data.rows.length === 0) {
-      return res.status(404).json({ error: 'No cards found for session' });
-    }
-
     const cards = data.rows.map((row: any) => ({
-    id: row.id,
-    sessionId: row.session_id,
-    content: row.content,
-    columnType: row.column_type,
-    position: row.position,
-    createdAt: row.created_at
-  }));
-  res.json({ message: `Get cards!`, cards });
+      id: row.id,
+      sessionId: row.session_id,
+      content: row.content,
+      columnType: row.column_type,
+      position: row.position,
+      createdAt: row.created_at
+    }));
+
+    res.json({ message: `Get cards!`, cards });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to get cards' });

@@ -10,20 +10,18 @@ router.post('/', async (req: express.Request, res: express.Response) => {
   // curl -X POST http://localhost:3001/api/sessions -H 'Content-Type: application/json' -d '{"name": "test"}'
 
   try {
-    const { name }: CreateSessionRequest = req.body;
-    if (!name) return res.status(400).json({ error: 'Name is required' });
-
     const id = nanoid();
+    const { name }: CreateSessionRequest | { name: string } = req.body || { name: 'session-' + id };
     const createdAt = new Date().toISOString();
 
     await turso.execute({
       sql: 'INSERT INTO sessions (id, name, created_at) VALUES (?, ?, ?)',
-      args: [id, name, createdAt]
+      args: [id, name!, createdAt]
     });
 
     const session: Session = {
       id,
-      name,
+      name: name!,
       createdAt
     };
 

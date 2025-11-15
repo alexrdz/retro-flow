@@ -12,6 +12,7 @@ export default function useCardService(sessionId: string) {
         setLoading(true)
         const data = await getCardsForSession(sessionId)
         setCards(data.cards)
+        setError(null)
       } catch (error) {
         setError((error as Error).message)
       } finally {
