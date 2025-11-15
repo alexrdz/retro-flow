@@ -63,3 +63,21 @@ export async function updateCard(id: string, content: string, columnType: string
     throw error;
   }
 }
+
+export async function deleteCard(id: string) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/cards/${id}`, {
+        method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      const errorMessage = await getErrorMessage(response);
+      throw new Error(`Failed to delete card: ${errorMessage}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

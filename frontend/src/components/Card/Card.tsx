@@ -2,8 +2,13 @@ import type { Card } from "../../types";
 import styles from "./Card.module.css";
 import { mapColumnTypeToText } from "../../utils";
 
-export default function Card(props: Card) {
-  const { id, sessionId, content, columnType, position, createdAt } = props
+interface CardProps {
+  card: Card
+  removeCard: (id: string) => void
+}
+
+export default function Card({card, removeCard}: CardProps) {
+  const { id, content, columnType } = card
   const columnTypeText = mapColumnTypeToText(columnType)
   const cardClasses = `${styles.card} ${styles[columnType]}`
   return (
@@ -21,7 +26,7 @@ export default function Card(props: Card) {
             </svg>
             <span className="sr-only">edit</span>
             </button>
-          <button className={styles['card-footer-button']}>
+          <button className={styles['card-footer-button']} onClick={() => removeCard(String(id))}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>

@@ -1,5 +1,4 @@
 import styles from "./AppLayout.module.css"
-
 interface AppLayoutProps {
     children: React.ReactNode
 }

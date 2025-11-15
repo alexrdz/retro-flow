@@ -6,9 +6,9 @@ import { useState, useEffect } from "react";
 import type { Card } from "../../types";
 
 interface ColumnProps {
-    children: React.ReactNode;
-    title: ColumnType;
-    onCardAdded: (newCard: Card) => void;
+  children: React.ReactNode;
+  title: ColumnType;
+  onCardAdded: (newCard: Omit<Card, 'id'>) => Promise<Card>;
 }
 
 export default function Column({children, title, onCardAdded}: ColumnProps) {

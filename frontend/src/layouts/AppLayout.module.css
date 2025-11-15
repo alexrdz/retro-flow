@@ -10,6 +10,10 @@
   text-transform: uppercase;
 }
 
+.app-header-logo {
+  inline-size: var(--size-8);
+}
+
 .app-footer {
   border-block-start: 1px solid var(--stone-3);
   margin-block-start: auto;
