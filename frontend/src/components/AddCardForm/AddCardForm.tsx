@@ -6,15 +6,16 @@ interface AddCardFormProps {
   columnType: ColumnType
   onCardCreated: () => void
   onCardAdded: (newCard: Omit<Card, 'id'>) => Promise<Card>
+  sessionId: string
 }
 
-export default function AddCardForm({columnType, onCardCreated, onCardAdded}: AddCardFormProps) {
+export default function AddCardForm({columnType, onCardCreated, onCardAdded, sessionId}: AddCardFormProps) {
   const [loading, setLoading] = useState(false)
   const { register, handleSubmit, reset, formState: { errors } } = useForm<CardFormData>()
 
   async function onFormSubmit(data: CardFormData) {
     const newCard: Omit<Card, 'id'> = {
-      sessionId: "1",
+      sessionId: sessionId,
       content: data.content,
       columnType: columnType,
       position: 1,

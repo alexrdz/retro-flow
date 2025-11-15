@@ -37,23 +37,27 @@ export default function Session() {
       <header>
         <h1>hello, alex</h1>
         <p>Welcome to Retro Session ID: {sessionId}</p>
-        <p>Share this link with your team: http://localhost:5173/session/{sessionId} <CopyButton text={`http://localhost:5173/session/${sessionId}`} /></p>
+        <p data-cluster="gap:sm align:center">
+          Share this link with your team:
+          <input style={{ flexGrow: 1 }} type="text" value={`http://localhost:5173/session/${sessionId}`} readOnly />
+          <CopyButton text={`http://localhost:5173/session/${sessionId}`} />
+        </p>
       </header>
 
       {loading && <p>Loading...</p>}
       {error ? <p>{error}</p> :
         <div data-switcher="gap:sm collapse:sm">
-          <Column title={ColumnType.WENT_WELL} onCardAdded={handleCardAdded}>
+          <Column title={ColumnType.WENT_WELL} onCardAdded={handleCardAdded} sessionId={sessionId}>
             {!loading && wentWellCards.length > 0 && wentWellCards.map((card) => (
               <CardComponent key={card.id} card={card} removeCard={removeCard} updateCard={updateCard} />
             ))}
           </Column>
-          <Column title={ColumnType.IMPROVE} onCardAdded={handleCardAdded}>
+          <Column title={ColumnType.IMPROVE} onCardAdded={handleCardAdded} sessionId={sessionId}>
             {!loading && improveCards.length > 0 && improveCards.map((card) => (
               <CardComponent key={card.id} card={card} removeCard={removeCard} updateCard={updateCard} />
             ))}
           </Column>
-          <Column title={ColumnType.ACTIONS} onCardAdded={handleCardAdded}>
+          <Column title={ColumnType.ACTIONS} onCardAdded={handleCardAdded} sessionId={sessionId}>
             {!loading && actionsCards.length > 0 && actionsCards.map((card) => (
               <CardComponent key={card.id} card={card} removeCard={removeCard} updateCard={updateCard} />
             ))}
