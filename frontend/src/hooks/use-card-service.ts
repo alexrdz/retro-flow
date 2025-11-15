@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import type { Card } from "../types";
-import { createCard, deleteCard, getCardsForSession } from "../services/card-service";
+import { createCard, deleteCard, getCardsForSession, updateCard as fetchUpdateCard  } from "../services/card-service";
 
 export default function useCardService(sessionId: string) {
     const [cards, setCards] = useState<Card[]>([])
@@ -31,6 +31,11 @@ export default function useCardService(sessionId: string) {
       await deleteCard(id)
     }
 
+    async function updateCard(updatedCard: Card) {
+      setCards((prevCards) => prevCards.map((card) => (String(card.id) === String(updatedCard.id) ? updatedCard : card)))
+      await fetchUpdateCard(updatedCard)
+    }
+
     useEffect(() => {
         fetchCards()
     }, [])
@@ -44,5 +49,6 @@ export default function useCardService(sessionId: string) {
         fetchCards,
         addCard,
         removeCard,
+        updateCard,
     }
 }

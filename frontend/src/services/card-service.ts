@@ -42,7 +42,9 @@ export async function createCard(card: Omit<Card, 'id'>) {
 }
 
 
-export async function updateCard(id: string, content: string, columnType: string, position: number) {
+export async function updateCard(card: Card) {
+  const { id, content, columnType, position } = card
+
   try {
     const response = await fetch(`${API_BASE_URL}/cards/${id}`, {
         method: 'PUT',

@@ -5,7 +5,7 @@ import  Column from '../Column/Column'
 import useCardService from '../../hooks/use-card-service'
 
 export default function Session() {
-  const { cards, loading, error, addCard, removeCard } = useCardService ("1")
+  const { cards, loading, error, addCard, removeCard, updateCard } = useCardService ("1")
 
   const wentWellCards = useMemo(
     () => cards.filter((card) => card.columnType === ColumnType.WENT_WELL),
@@ -40,17 +40,17 @@ export default function Session() {
       <div data-switcher="gap:sm collapse:sm">
         <Column title={ColumnType.WENT_WELL} onCardAdded={handleCardAdded}>
           {!loading && wentWellCards.length > 0 && wentWellCards.map((card) => (
-            <CardComponent key={card.id} card={card} removeCard={removeCard}  />
+            <CardComponent key={card.id} card={card} removeCard={removeCard} onUpdate={updateCard} />
           ))}
         </Column>
         <Column title={ColumnType.IMPROVE} onCardAdded={handleCardAdded}>
           {!loading && improveCards.length > 0 && improveCards.map((card) => (
-            <CardComponent key={card.id} card={card} removeCard={removeCard} />
+            <CardComponent key={card.id} card={card} removeCard={removeCard} onUpdate={updateCard} />
           ))}
         </Column>
         <Column title={ColumnType.ACTIONS} onCardAdded={handleCardAdded}>
           {!loading && actionsCards.length > 0 && actionsCards.map((card) => (
-            <CardComponent key={card.id} card={card} removeCard={removeCard} />
+            <CardComponent key={card.id} card={card} removeCard={removeCard} onUpdate={updateCard} />
           ))}
         </Column>
       </div>

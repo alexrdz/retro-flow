@@ -11,6 +11,21 @@
 
   article {
     padding: var(--size-fluid-3);
+    position: relative;
+  }
+
+  article:has(.card-textarea) {
+    padding: 0;
+  }
+
+  .card-textarea {
+    inline-size: 100%;
+    padding: var(--size-fluid-2);
+    border: 1px dotted var(--stone-3);
+    outline: none;
+    background-color: transparent;
+    position: relative;
+    inset: 0;
   }
 
   footer {
