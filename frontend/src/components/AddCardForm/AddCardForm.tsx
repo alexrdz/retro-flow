@@ -7,9 +7,10 @@ import { useState } from "react"
 interface AddCardFormProps {
     columnType: ColumnType
     onCardCreated: () => void
+    onCardAdded: (newCard: Card) => void
 }
 
-export default function AddCardForm({columnType, onCardCreated}: AddCardFormProps) {
+export default function AddCardForm({columnType, onCardCreated, onCardAdded}: AddCardFormProps) {
   const [loading, setLoading] = useState(false)
     const { register, handleSubmit, reset, formState: { errors } } = useForm<CardFormData>()
 
@@ -28,6 +29,7 @@ export default function AddCardForm({columnType, onCardCreated}: AddCardFormProp
 
         if(createdCard.id) {
           onCardCreated()
+          onCardAdded(createdCard)
           reset()
         }
       } catch (error) {

@@ -1,9 +1,8 @@
 .card {
   border: 1px solid var(--stone-10);
   border-radius: 3px;
-  margin: 0.5rem;
-  transition: all 0.3s ease-in-out;
-  box-shadow: 4px 4px 0 var(--stone-10);
+  transition: all 0.2s ease-in-out;
+  box-shadow: 2px 2px 0 var(--stone-10);
 
   &:hover {
     box-shadow: 8px 8px 0 var(--stone-10);
@@ -15,12 +14,33 @@
   }
 
   footer {
-    padding: var(--size-fluid-2) var(--size-fluid-1);
+    padding: .75rem var(--size-fluid-1);
     background-color: var(--stone-1);
     border-top: 1px solid var(--stone-5);
+    font-size: .75rem;
+
+    > div {
+      margin-inline-start: auto;
+    }
   }
 }
 
+.card-footer-button {
+  border: none;
+  background-color: transparent;
+  padding: .5rem;
+
+  svg {
+    inline-size: var(--size-3);
+    color: var(--stone-12);
+  }
+
+  &:hover {
+    svg {
+      color: var(--color-link-primary);
+    }
+  }
+}
 
 .went_well {
   --pill-bg-color: var(--pink-3);

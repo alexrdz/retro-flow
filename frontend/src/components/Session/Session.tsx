@@ -35,27 +35,34 @@ export default function Session() {
     }
   }
 
+  function handleCardAdded(newCard: Card) {
+    setCards((prevCards) => [...prevCards, newCard])
+  }
+
   useEffect(() => {
     fetchCards()
   }, [])
 
   return (
     <div className='app-container' data-container data-stack="gap:md">
-      <h1>hello, alex</h1>
+      <header>
+        <h1>hello, alex</h1>
+        <p>Welcome to Retro Session ID: 1</p>
+      </header>
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
       <div data-switcher="gap:sm collapse:sm">
-        <Column title={ColumnType.WENT_WELL}>
+        <Column title={ColumnType.WENT_WELL} onCardAdded={handleCardAdded}>
           {!loading && wentWellCards.length > 0 && wentWellCards.map((card) => (
             <CardComponent key={card.id} {...card} />
           ))}
         </Column>
-        <Column title={ColumnType.IMPROVE}>
+        <Column title={ColumnType.IMPROVE} onCardAdded={handleCardAdded}>
           {!loading && improveCards.length > 0 && improveCards.map((card) => (
             <CardComponent key={card.id} {...card} />
           ))}
         </Column>
-        <Column title={ColumnType.ACTIONS}>
+        <Column title={ColumnType.ACTIONS} onCardAdded={handleCardAdded}>
           {!loading && actionsCards.length > 0 && actionsCards.map((card) => (
             <CardComponent key={card.id} {...card} />
           ))}
