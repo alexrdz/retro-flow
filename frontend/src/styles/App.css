@@ -17,3 +17,23 @@ html, body {
 .app-container {
   padding: var(--size-8);
 }
+
+/* selector for class that starts with column-indicator- */
+[class^="column-indicator"] {
+  --indicator-bg-color: var(--stone-3);
+  inline-size: .75rem;
+  block-size: .75rem;
+  border-radius: 50%;
+  display: inline-block;
+  background-color: var(--indicator-bg-color);
+}
+
+.column-indicator-went_well {
+  --indicator-bg-color: var(--pink-3);
+}
+.column-indicator-improve {
+  --indicator-bg-color: var(--blue-3);
+}
+.column-indicator-actions {
+  --indicator-bg-color: var(--green-3);
+}

@@ -1,50 +1,56 @@
-import { useEffect } from 'react'
-import { getCardsForSession } from '../../services/card-service'
-import { useState } from 'react'
+import { useMemo } from 'react'
 import { ColumnType, type Card } from '../../types'
 import CardComponent from '../Card/Card'
 import  Column from '../Column/Column'
+import useCardService from '../../hooks/use-card-service'
 
 export default function Session() {
-  const [loading, setLoading] = useState(true)
-  const [cards, setCards] = useState<Card[]>([])
-  const [error, setError] = useState<string | null>(null)
+  const { cards, loading, error, addCard, removeCard, updateCard } = useCardService ("1")
 
-  async function fetchCards() {
-    try {
-      setLoading(true)
-      const data = await getCardsForSession("1")
-      setCards(data.cards)
-    } catch (error) {
-      setError((error as Error).message)
-    } finally {
-      setLoading(false)
-    }
+  const wentWellCards = useMemo(
+    () => cards.filter((card) => card.columnType === ColumnType.WENT_WELL),
+    [cards]
+  )
+  const improveCards = useMemo(
+    () => cards.filter((card) => card.columnType === ColumnType.IMPROVE),
+    [cards]
+  )
+  const actionsCards = useMemo(
+    () => cards.filter((card) => card.columnType === ColumnType.ACTIONS),
+    [cards]
+  )
+
+
+  async function handleCardAdded(
+    newCard: Omit<Card, 'id'>
+  ): Promise<Card> {
+    const createdCard = await addCard(newCard)
+    return createdCard
   }
 
-  useEffect(() => {
-    fetchCards()
-  }, [])
 
   return (
     <div className='app-container' data-container data-stack="gap:md">
-      <h1>hello, alex</h1>
+      <header>
+        <h1>hello, alex</h1>
+        <p>Welcome to Retro Session ID: 1</p>
+      </header>
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
       <div data-switcher="gap:sm collapse:sm">
-        <Column title={ColumnType.WENT_WELL}>
-          {!loading && cards.length > 0 && cards.map((card) => (
-            <CardComponent key={card.id} {...card} />
+        <Column title={ColumnType.WENT_WELL} onCardAdded={handleCardAdded}>
+          {!loading && wentWellCards.length > 0 && wentWellCards.map((card) => (
+            <CardComponent key={card.id} card={card} removeCard={removeCard} onUpdate={updateCard} />
           ))}
         </Column>
-        <Column title={ColumnType.IMPROVE}>
-          {!loading && cards.length > 0 && cards.map((card) => (
-            <CardComponent key={card.id} {...card} />
+        <Column title={ColumnType.IMPROVE} onCardAdded={handleCardAdded}>
+          {!loading && improveCards.length > 0 && improveCards.map((card) => (
+            <CardComponent key={card.id} card={card} removeCard={removeCard} onUpdate={updateCard} />
           ))}
         </Column>
-        <Column title={ColumnType.ACTIONS}>
-          {!loading && cards.length > 0 && cards.map((card) => (
-            <CardComponent key={card.id} {...card} />
+        <Column title={ColumnType.ACTIONS} onCardAdded={handleCardAdded}>
+          {!loading && actionsCards.length > 0 && actionsCards.map((card) => (
+            <CardComponent key={card.id} card={card} removeCard={removeCard} onUpdate={updateCard} />
           ))}
         </Column>
       </div>
