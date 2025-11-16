@@ -2,33 +2,56 @@ import express from 'express';
 const router = express.Router();
 import { turso } from '../database';
 import { ActionItem, CreateActionItemRequest, UpdateActionItemRequest } from '../types';
+import { sanitizeString, validateEnum, validateOptionalString, validateRequiredString, ValidationError } from '../utils/validation';
 
 // POST /api/action-items
 router.post('/', async (req: express.Request, res: express.Response) => {
     try {
-      const { sessionId, title, description,
-  assignedTo }: CreateActionItemRequest = req.body;
+      const { sessionId, title, description, assignedTo }: CreateActionItemRequest = req.body;
+
+      const errors: ValidationError[] = [];
+
+      const sessionIdError = validateRequiredString(sessionId, 'sessionId', 100);
+      if (sessionIdError) errors.push(sessionIdError);
+
+      const titleError = validateRequiredString(title, 'title', 200);
+      if (titleError) errors.push(titleError);
+
+      const descriptionError = validateOptionalString(description, 'description', 500);
+      if (descriptionError) errors.push(descriptionError);
+
+      const assignedToError = validateOptionalString(assignedTo, 'assignedTo', 100);
+      if (assignedToError) errors.push(assignedToError);
+
+      if (errors.length > 0) {
+        return res.status(400).json({
+          error: 'Validation failed',
+          details: errors
+        });
+      }
+
+      const sanitizedTitle = sanitizeString(title, 200);
+      const sanitizedDescription = description ? sanitizeString(description, 500) : null;
+      const sanitizedAssignedTo = assignedTo ? sanitizeString(assignedTo, 100) : null;
 
       // Validate required fields
-      if (!sessionId || !title) {
+      if (!sessionId || !sanitizedTitle) {
         return res.status(400).json({ error: 'sessionId and title are required' });
       }
 
       const timestamp = new Date().toISOString();
       const result = await turso.execute(
         'INSERT INTO action_items (session_id, title, description, assigned_to, status, created_at) VALUES (?, ?, ?, ?, ?, ?)',
-        [sessionId, title, description || null, assignedTo || null, 'pending', timestamp]
+        [sessionId, sanitizedTitle, sanitizedDescription, sanitizedAssignedTo, 'pending', timestamp]
       );
-
-      console.log(result);
 
       const newActionItemId = Number(result.lastInsertRowid);
       const newActionItem: ActionItem = {
         id: newActionItemId,
         sessionId,
-        title,
-        description: description || undefined,
-        assignedTo: assignedTo || undefined,
+        title: sanitizedTitle,
+        description: sanitizedDescription || undefined,
+        assignedTo: sanitizedAssignedTo || undefined,
         status: 'pending',
         createdAt: timestamp
       };
@@ -47,6 +70,35 @@ router.put('/:id', async (req: express.Request, res: express.Response) => {
       const { id } = req.params;
       const { title, description, assignedTo, status }: UpdateActionItemRequest = req.body;
 
+      const errors: ValidationError[] = [];
+
+      if (title !== undefined) {
+        const titleError = validateRequiredString(title, 'title', 200);
+        if (titleError) errors.push(titleError);
+      }
+
+      if (description !== undefined) {
+        const descError = validateOptionalString(description, 'description', 500);
+        if (descError) errors.push(descError);
+      }
+
+      if (assignedTo !== undefined) {
+        const assignedError = validateOptionalString(assignedTo, 'assignedTo', 100);
+        if (assignedError) errors.push(assignedError);
+      }
+
+      if (status !== undefined) {
+        const statusError = validateEnum(status, 'status', ['pending', 'in_progress', 'completed']);
+        if (statusError) errors.push(statusError);
+      }
+
+      if (errors.length > 0) {
+        return res.status(400).json({
+          error: 'Validation failed',
+          details: errors
+        });
+      }
+
       const setClauses: string[] = [];
       const args: (string | null)[] = [];
 
@@ -63,10 +115,6 @@ router.put('/:id', async (req: express.Request, res: express.Response) => {
         args.push(assignedTo || null);
       }
       if (status !== undefined) {
-        // Validate status
-        if (!['pending', 'in_progress', 'completed'].includes(status)) {
-          return res.status(400).json({ error: 'Invalid status. Must be pending, in_progress, or completed' });
-        }
         setClauses.push('status = ?');
         args.push(status);
       }
@@ -86,8 +134,6 @@ router.put('/:id', async (req: express.Request, res: express.Response) => {
         return res.status(404).json({ error: 'Action item not found' });
       }
 
-      console.log(result);
-
       res.json({ message: `Updated action item ${id}` });
     } catch (error) {
       console.error(error);
@@ -97,21 +143,20 @@ router.put('/:id', async (req: express.Request, res: express.Response) => {
 
 // DELETE /api/action-items/:id
 router.delete('/:id', async (req: express.Request, res: express.Response) => {
-    try {
-      const { id } = req.params;
-      const result = await turso.execute("DELETE FROM action_items WHERE id = ?", [id]);
+  try {
+    const { id } = req.params;
+    const result = await turso.execute("DELETE FROM action_items WHERE id = ?", [id]);
 
-      if (result.rowsAffected === 0) {
-        return res.status(404).json({ error: 'Action item not found' });
-      }
-
-      console.log(result);
-      res.json({ message: `Deleted action item ${id}` });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Failed to delete action item' });
+    if (result.rowsAffected === 0) {
+      return res.status(404).json({ error: 'Action item not found' });
     }
-  });
+
+    res.json({ message: `Deleted action item ${id}` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to delete action item' });
+  }
+});
 
   // GET /api/action-items (optional - mainly for debugging)
 router.get('/', async (req: express.Request, res: express.Response) => {

@@ -3,6 +3,7 @@ import { CreateSessionRequest } from '../types';
 import { Session, Card } from '../types';
 import { nanoid } from 'nanoid';
 import { turso } from '../database';
+import { sanitizeString, validateRequiredString } from '../utils/validation';
 const router = express.Router();
 
 // POST /api/sessions
@@ -14,11 +15,19 @@ router.post('/', async (req: express.Request, res: express.Response) => {
   try {
     const id = nanoid();
     const { name }: CreateSessionRequest | { name: string } = req.body || { name: 'session-' + id };
+    let sessionName = name || `session-${id}`;
+    if (sessionName) {
+      const nameError = validateRequiredString(sessionName, 'name', 100);
+      if (nameError) {
+        return res.status(400).json({ error: nameError.message });
+      }
+      sessionName = sanitizeString(sessionName, 100);
+    }
     const createdAt = new Date().toISOString();
 
     await turso.execute({
       sql: 'INSERT INTO sessions (id, name, created_at) VALUES (?, ?, ?)',
-      args: [id, name!, createdAt]
+      args: [id, sessionName, createdAt]
     });
 
     // default columns
@@ -34,7 +43,7 @@ router.post('/', async (req: express.Request, res: express.Response) => {
 
     const session: Session = {
       id,
-      name: name!,
+      name: sessionName,
       createdAt
     };
 
