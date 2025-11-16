@@ -84,11 +84,11 @@ export default function Session() {
       <header>
         <h1>hello, alex</h1>
         <p>Welcome to Retro Session ID: {sessionId}</p>
-        <p data-cluster="gap:sm align:center">
-          Share this link with your team:
+        <div data-cluster="gap:sm align:center">
+          <p>Share this link with your team:</p>
           <input style={{ flexGrow: 1  }} type="text" value={`http://localhost:5173/session/${sessionId}`} readOnly />
           <CopyButton text={`http://localhost:5173/session/${sessionId}`} />
-        </p>
+        </div>
       </header>
 
       <div data-switcher="gap:sm collapse:sm">
@@ -120,8 +120,7 @@ export default function Session() {
         {/* TODO: Add ActionItems component here */}
         {sessionData.actionItems.length > 0 && (
           <div>
-            <h2>Action Items
-  ({sessionData.actionItems.length})</h2>
+            <h2>Action Items ({sessionData.actionItems.length})</h2>
             {/* We'll build this component next */}
           </div>
         )}

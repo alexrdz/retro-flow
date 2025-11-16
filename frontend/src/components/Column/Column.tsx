@@ -6,7 +6,7 @@ import type { Card, Column as ColumnType } from "../../types";
 interface ColumnProps {
   children: React.ReactNode;
   column: ColumnType;
-  onCardAdded: (newCard: Omit<Card, 'id'>) => Promise<Card>;
+  onCardAdded: (newCard: Omit<Card, 'id' | 'createdAt'>) => Promise<Card>;
   sessionId: string;
 }
 
@@ -29,7 +29,7 @@ export default function Column({children, column, onCardAdded, sessionId}: Colum
       <div className={styles.column} data-container data-stack="gap:sm">
         {cardAdded && <p className={styles['card-added']}>✅ Card added!</p>}
         <h2 data-cluster="gap:sm align:center">
-          <span className={`column-indicator`} style={{ backgroundColor: `var(${column.color})` }}></span>
+          <span className={`column-indicator bg${column.color}`}></span>
           {column.name}
         </h2>
         <AddCardForm

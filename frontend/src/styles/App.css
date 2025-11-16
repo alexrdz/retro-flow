@@ -19,7 +19,7 @@ html, body {
 }
 
 /* selector for class that starts with column-indicator- */
-[class^="column-indicator"] {
+.column-indicator {
   --indicator-bg-color: var(--stone-3);
   inline-size: .75rem;
   block-size: .75rem;
@@ -28,12 +28,34 @@ html, body {
   background-color: var(--indicator-bg-color);
 }
 
-.column-indicator-went_well {
-  --indicator-bg-color: var(--pink-3);
+.bg--green-6 {
+  --indicator-bg-color: var(--green-6);
 }
-.column-indicator-improve {
-  --indicator-bg-color: var(--blue-3);
+.bg--red-6 {
+  --indicator-bg-color: var(--red-6);
 }
-.column-indicator-actions {
-  --indicator-bg-color: var(--green-3);
+.bg--blue-6 {
+  --indicator-bg-color: var(--blue-6);
+}
+
+
+.animated-fade-in {
+  animation: fadeIn 2s ease-in-out;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
