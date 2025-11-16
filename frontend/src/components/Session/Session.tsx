@@ -11,6 +11,7 @@ import ActionItems from '../ActionItems/ActionItems'
 import { createActionItem, updateActionItem, deleteActionItem } from '../../services/action-item-service'
 import type { ActionItemFormData } from '../../types'
 import ErrorBanner from '../ErrorBanner/ErrorBanner'
+import { getUsername } from '../../utils/user'
 
 export default function Session() {
   const sessionId = useLocation().pathname.split('/').pop() ?? ''
@@ -18,6 +19,7 @@ export default function Session() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [operationError, setOperationError] = useState<string | null>(null)
+  const [username, setUsername] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchSession() {
@@ -34,6 +36,13 @@ export default function Session() {
     }
     fetchSession()
   }, [sessionId])
+
+  useEffect(() => {
+    const username = getUsername();
+    if (username) {
+      setUsername(username);
+    }
+  }, [])
 
   async function addCard(newCard: Omit<Card, 'id' | 'createdAt'>): Promise<Card> {
     try {
@@ -167,10 +176,11 @@ export default function Session() {
 
 
 
+
   return (
     <div className='app-container' data-container data-stack="gap:md">
       <header>
-        <h1>hello, alex</h1>
+        <h1>hello, {username || 'user'}</h1>
         <p>Welcome to Retro Session ID: {sessionId}</p>
         <div data-cluster="gap:sm align:center">
           <p>Share this link with your team:</p>

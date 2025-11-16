@@ -1,3 +1,16 @@
 .home {
   padding: var(--size-12);
 }
+
+p {
+  small {
+    border-radius: 25rem;
+    border: 1px solid var(--stone-3);
+    outline: 1px solid white;
+    padding: var(--size-1) var(--size-4);
+    background-color: var(--stone-2);
+    inline-size: fit-content;
+    display: block;
+    margin-inline: auto;
+  }
+}

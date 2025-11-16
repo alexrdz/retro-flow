@@ -163,4 +163,30 @@ router.delete('/:id', async (req: express.Request, res: express.Response) => {
   }
 });
 
+router.post('/join/:id', async (req: express.Request, res: express.Response) => {
+  try {
+    const sessionID = req.body.id;
+    const username = req.body.username; // username is optional
+    console.log(sessionID, username);
+
+    const participantsResult = await turso.execute("SELECT participants FROM sessions WHERE id = ?", [sessionID]);
+    if (!participantsResult.rows.length) {
+      return res.status(404).json({ error: 'Session not found' });
+    }
+
+    const participants = JSON.parse(participantsResult.rows[0].participants as string) || [];
+    if (participants.includes(username)) {
+      return res.status(400).json({ error: 'User already in session' });
+    }
+
+    participants.push(username);
+    await turso.execute("UPDATE sessions SET participants = ? WHERE id = ?", [JSON.stringify(participants), sessionID]);
+    res.json({ message: `Joined session ${sessionID}`, sessionId: sessionID });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to join session', message: (error as Error).message });
+  }
+});
+
 export default router;

@@ -17,8 +17,11 @@ export default function AddSessionForm() {
     }
 
     return (
-        <form onSubmit={onFormSubmit}>
-            <button type="submit">Create a new Retro Session</button>
+        <form onSubmit={onFormSubmit} data-stack="gap:sm align:center">
+          <p>
+            Start a new retro session for your team.
+          </p>
+          <button type="submit">Create a new Retro Session</button>
         </form>
     )
 }

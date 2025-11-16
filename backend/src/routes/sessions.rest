@@ -13,4 +13,9 @@
 # {"name": "test"}
 
 
-GET http://localhost:3001/api/sessions
+# GET http://localhost:3001/api/sessions
+
+# POST http://localhost:3001/api/sessions/join/:id
+# Content-Type: application/json
+
+# {"username": "test", "id": "eUMw1xJ9kJXP73MsxScc2"}
