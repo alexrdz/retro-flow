@@ -20,6 +20,7 @@ export interface Card {
     columnId: number;
     position: number;
     createdAt: string;
+    createdBy?: string;
 }
 
 export interface ActionItem {

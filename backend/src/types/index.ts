@@ -21,6 +21,7 @@ export interface Card {
   content: string;
   position: number;
   createdAt: string;
+  createdBy?: string;
 }
 
 export interface ActionItem {
