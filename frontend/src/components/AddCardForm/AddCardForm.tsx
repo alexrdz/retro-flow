@@ -41,10 +41,17 @@ export default function AddCardForm({columnId, onCardCreated, onCardAdded, sessi
       <form className={styles['add-card-form']} onSubmit={handleSubmit(onFormSubmit)} data-stack="gap:sm">
           <textarea
             className={styles.textarea + " " + (errors.content ? styles.error : '')}
-            {...register('content', { required: 'Content is required', maxLength: 280 })}
+            {...register('content', {
+              required: 'Content is required',
+              maxLength: { value: 280, message: 'Content must be at most 280 characters' },
+              validate: {
+                notEmpty: (value) => value.trim().length > 0 || 'Content is required',
+              }
+            })}
             placeholder="Add a card..."
+            maxLength={500}
           />
-          {errors.content && <p>{errors.content.message}</p>}
+          {errors.content && <p className={styles['error-message']}>{errors.content.message}</p>}
           <button type="submit" disabled={loading}>{loading ? 'Adding...' : 'Add Card'}</button>
       </form>
   )

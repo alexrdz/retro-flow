@@ -33,8 +33,18 @@ export default function AddActionItemForm({onActionItemAdded }: AddActionItemFor
             id="title"
             type="text"
             className={errors.title ? styles.error : ''}
-            {...register('title', { required: 'Title is required', maxLength: 200 })}
+            {...register('title', {
+              required: 'Title is required',
+              maxLength: {
+                value: 200,
+                message: 'Title must be 200 characters or less',
+              },
+              validate: {
+                notEmpty: (value) => value.trim().length > 0 || 'Title is required',
+              }
+            })}
             placeholder="What needs to be done?"
+            maxLength={200}
           />
           {errors.title && <p className={styles['error-message']}>{errors.title.message}</p>}
         </div>
@@ -46,9 +56,16 @@ export default function AddActionItemForm({onActionItemAdded }: AddActionItemFor
               <label htmlFor="description">Description</label>
               <textarea
                 id="description"
-                {...register('description', { maxLength: 500 })}
+                {...register('description', {
+                  maxLength: {
+                    value: 500,
+                    message: 'Description must be 500 characters or less',
+                  }
+                }
+              )}
                 placeholder="Additional details..."
                 rows={3}
+                maxLength={500}
               />
             </div>
 
@@ -57,8 +74,15 @@ export default function AddActionItemForm({onActionItemAdded }: AddActionItemFor
               <input
                 id="assignedTo"
                 type="text"
-                {...register('assignedTo', { maxLength: 100 })}
+                {...register('assignedTo', {
+                  maxLength: {
+                    value: 100,
+                    message: 'Assigned To must be 100 characters or less',
+                  }
+                }
+              )}
                 placeholder="Who will do this?"
+                maxLength={100}
               />
             </div>
           </>
