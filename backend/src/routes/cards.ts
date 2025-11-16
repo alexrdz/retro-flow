@@ -7,11 +7,11 @@ import { Card, CreateCardRequest, UpdateCardRequest } from '../types';
 router.post('/', async (req: express.Request, res: express.Response) => {
   // curl -X POST http://localhost:3001/api/cards -H 'Content-Type: application/json' -d '{"content": "test"}'
     try {
-    const { sessionId, content, columnType, position }: CreateCardRequest = req.body;
+    const { sessionId, content, columnId, position }: CreateCardRequest = req.body;
 
     const maxPositionResult = await turso.execute({
-      sql: `SELECT MAX(position) as max_position FROM cards WHERE session_id = ? AND column_type = ?`,
-      args: [sessionId, columnType]
+      sql: `SELECT MAX(position) as max_position FROM cards WHERE session_id = ? AND column_id = ?`,
+      args: [sessionId, columnId]
     });
 
     const maxPosition = maxPositionResult.rows[0]?.max_position || 0;
@@ -19,25 +19,21 @@ router.post('/', async (req: express.Request, res: express.Response) => {
 
     const timestamp = new Date().toISOString();
     const result = await turso.execute(
-      'INSERT INTO cards (session_id, content, column_type, position, created_at) VALUES (?, ?, ?, ?, ?)',
-      [sessionId, content, columnType, newPosition, timestamp]
+      'INSERT INTO cards (session_id, content, column_id, position, created_at) VALUES (?, ?, ?, ?, ?)',
+      [sessionId, content, columnId, newPosition, timestamp]
     );
-
-    console.log(result);
 
     const newCardId = Number(result.lastInsertRowid);
     const newCard: Card = {
       id: newCardId,
       sessionId,
       content,
-      columnType,
+      columnId,
       position: newPosition,
       createdAt: timestamp
     };
 
     res.status(201).json(newCard);
-
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to create card' });
@@ -48,7 +44,7 @@ router.post('/', async (req: express.Request, res: express.Response) => {
 router.put('/:id', async (req: express.Request, res: express.Response) => {
   try {
     const { id } = req.params;
-    const { content, columnType, position }: UpdateCardRequest = req.body;
+    const { content, columnId, position }: UpdateCardRequest = req.body;
 
     const setClauses: string[] = [];
     const args: (string | number)[] = [];
@@ -57,9 +53,9 @@ router.put('/:id', async (req: express.Request, res: express.Response) => {
       setClauses.push('content = ?');
       args.push(content);
     }
-    if (columnType !== undefined) {
-      setClauses.push('column_type = ?');
-      args.push(columnType);
+    if (columnId !== undefined) {
+      setClauses.push('column_id = ?');
+      args.push(columnId);
     }
     if (position !== undefined) {
       setClauses.push('position = ?');
@@ -81,8 +77,6 @@ router.put('/:id', async (req: express.Request, res: express.Response) => {
       return res.status(404).json({ error: 'Card not found' });
     }
 
-    console.log(result);
-
     res.json({ message: `Updated card ${id}` });
   } catch (error) {
     console.error(error);
@@ -98,7 +92,7 @@ router.delete('/:id', async (req: express.Request, res: express.Response) => {
     if (result.rowsAffected === 0) {
       return res.status(404).json({ error: 'Card not found' });
     }
-    console.log(result);
+
     res.json({ message: `Deleted card ${id}` });
   } catch (error) {
     console.error(error);
@@ -120,12 +114,12 @@ router.get('/', async (req: express.Request, res: express.Response) => {
       id: row.id,
       sessionId: row.session_id,
       content: row.content,
-      columnType: row.column_type,
+      columnId: row.column_id,
       position: row.position,
       createdAt: row.created_at
     }));
 
-    res.json({ message: `Get cards!`, cards });
+    res.json({ cards });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to get cards' });

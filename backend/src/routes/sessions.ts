@@ -7,7 +7,9 @@ const router = express.Router();
 
 // POST /api/sessions
 router.post('/', async (req: express.Request, res: express.Response) => {
-  // curl -X POST http://localhost:3001/api/sessions -H 'Content-Type: application/json' -d '{"name": "test"}'
+  // auto-create 2 default columns when a session is created
+  // 1. what went well
+  // 2. needs improvement
 
   try {
     const id = nanoid();
@@ -17,6 +19,17 @@ router.post('/', async (req: express.Request, res: express.Response) => {
     await turso.execute({
       sql: 'INSERT INTO sessions (id, name, created_at) VALUES (?, ?, ?)',
       args: [id, name!, createdAt]
+    });
+
+    // default columns
+    await turso.execute({
+      sql: 'INSERT INTO columns (session_id, name, position, color, created_at) VALUES (?, ?, ?, ?, ?)',
+      args: [id, 'What Went Well', 1, '--green-6', createdAt]
+    });
+
+    await turso.execute({
+      sql: 'INSERT INTO columns (session_id, name, position, color, created_at) VALUES (?, ?, ?, ?, ?)',
+      args: [id, 'Needs Improvement', 2, '--red-6', createdAt]
     });
 
     const session: Session = {
@@ -52,8 +65,24 @@ router.get('/:id', async (req: express.Request, res: express.Response) => {
       createdAt: String(sessionRow.created_at)
     };
 
+    // fetch columns for session
+    const columnsResult = await turso.execute({
+      sql: 'SELECT id, session_id, name, position, color, created_at FROM columns WHERE session_id = ?',
+      args: [sessionID]
+    });
+
+    const columns = columnsResult.rows.map((r: any) => ({
+      id: Number(r.id),
+      sessionId: String(r.session_id),
+      name: String(r.name),
+      position: Number(r.position),
+      color: String(r.color),
+      createdAt: String(r.created_at)
+    }));
+
+    // fetch cards for session
     const cardsResult = await turso.execute({
-      sql: 'SELECT id, session_id, content, column_type, position, created_at FROM cards WHERE session_id = ?',
+      sql: 'SELECT id, session_id, content, column_id, position, created_at FROM cards WHERE session_id = ?',
       args: [sessionID]
     });
 
@@ -61,18 +90,35 @@ router.get('/:id', async (req: express.Request, res: express.Response) => {
       id: Number(r.id),
       sessionId: String(r.session_id),
       content: String(r.content),
-      columnType: String(r.column_type) as Card['columnType'],
+      columnId: Number(r.column_id),
       position: Number(r.position),
       createdAt: String(r.created_at)
     }));
 
-    const sessionWithCards = {
-      ...session,
-      cards
+    // fetch action items for session
+    const actionItemsResult = await turso.execute({
+      sql: 'SELECT id, session_id, title, description, assigned_to, status, created_at FROM action_items WHERE session_id = ?',
+      args: [sessionID]
+    });
+
+    const actionItems = actionItemsResult.rows.map((r: any) => ({
+      id: Number(r.id),
+      sessionId: String(r.session_id),
+      title: String(r.title),
+      description: String(r.description),
+      assignedTo: String(r.assigned_to),
+      status: String(r.status) as 'pending' | 'in_progress' | 'completed',
+      createdAt: String(r.created_at)
+    }));
+
+    const sessionData = {
+      session,
+      columns,
+      cards,
+      actionItems,
     };
 
-    res.status(200).json(sessionWithCards);
-
+    res.status(200).json(sessionData);
 
   } catch (error) {
     console.error(error);

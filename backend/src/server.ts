@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import sessionRoutes from './routes/sessions';
 import cardRoutes from './routes/cards';
+import actionItemRoutes from './routes/action-items';
 
 
 dotenv.config();
@@ -33,6 +34,7 @@ app.get('/api/health', (req: Request, res: Response) => {
 // app routes
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/cards', cardRoutes);
+app.use('/api/action-items', actionItemRoutes);
 
 // catch all 404s
 app.use((req, res) => {
