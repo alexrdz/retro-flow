@@ -6,9 +6,11 @@ export default function CopyButton({ text }: { text: string }) {
   function handleCopy() {
     navigator.clipboard.writeText(text)
     if (checkRef.current) {
+      checkRef.current.style.display = 'block'
       checkRef.current.classList.add('animated-fade-in-out')
       setTimeout(() => {
         checkRef.current!.classList.remove('animated-fade-in-out')
+        checkRef.current!.style.display = 'none'
       }, 3000)
     }
   }

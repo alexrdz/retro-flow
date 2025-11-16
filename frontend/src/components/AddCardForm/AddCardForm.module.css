@@ -6,8 +6,10 @@
   min-block-size: var(--size-11);
 
   & + p {
+    background-color: var(--input-bg-color);
     color: var(--red-12);
     font-size: var(--font-size-1);
+    padding: var(--size-2);
     position: absolute;
     bottom: 40%;
     right: 5%;

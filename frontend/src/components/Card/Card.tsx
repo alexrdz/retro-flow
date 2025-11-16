@@ -1,6 +1,6 @@
 import type { Card } from "../../types"
 import styles from "./Card.module.css"
-import { useState, useRef, useEffect } from "react"
+import { useRef, useEffect } from "react"
 interface CardProps {
   card: Card
   removeCard: (id: string) => void
@@ -19,8 +19,14 @@ export default function Card({card, removeCard, updateCard}: CardProps) {
 
   const handleBlur = () => {
     const text = contentRef.current?.textContent ?? '';
-    if (text !== content) {
+    const sanitized = text.trim().slice(0, 500)
+
+    if (sanitized !== content && sanitized.length > 0) {
       updateCard({ ...card, content: text });
+    } else if (sanitized.length === 0) {
+      if (contentRef.current) {
+        contentRef.current.textContent = content
+      }
     }
   };
 

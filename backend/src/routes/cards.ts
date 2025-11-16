@@ -2,12 +2,36 @@ import express from 'express';
 const router = express.Router();
 import { turso } from '../database';
 import { Card, CreateCardRequest, UpdateCardRequest } from '../types';
+import { sanitizeString, validateNumber, validateRequiredString, ValidationError } from '../utils/validation';
 
 // POST /api/cards
 router.post('/', async (req: express.Request, res: express.Response) => {
   // curl -X POST http://localhost:3001/api/cards -H 'Content-Type: application/json' -d '{"content": "test"}'
     try {
     const { sessionId, content, columnId, position }: CreateCardRequest = req.body;
+
+    const errors: ValidationError[] = [];
+
+    const sessionIdError = validateRequiredString(sessionId, 'sessionId', 100);
+    if (sessionIdError) errors.push(sessionIdError);
+
+    const contentError = validateRequiredString(content, 'content', 500);
+    if (contentError) errors.push(contentError);
+
+    const columnIdError = validateNumber(columnId, 'columnId', 1);
+    if (columnIdError) errors.push(columnIdError);
+
+    const positionError = validateNumber(position, 'position', 0);
+    if (positionError) errors.push(positionError);
+
+    if (errors.length > 0) {
+      return res.status(400).json({
+        error: 'Validation failed',
+        details: errors
+      });
+    }
+
+    const sanitizedContent = sanitizeString(content, 500);
 
     const maxPositionResult = await turso.execute({
       sql: `SELECT MAX(position) as max_position FROM cards WHERE session_id = ? AND column_id = ?`,
@@ -45,6 +69,34 @@ router.put('/:id', async (req: express.Request, res: express.Response) => {
   try {
     const { id } = req.params;
     const { content, columnId, position }: UpdateCardRequest = req.body;
+
+    const idError = validateNumber(id, 'id', 1);
+    if (idError) {
+      return res.status(400).json({ error: idError.message });
+    }
+
+    const errors: ValidationError[] = [];
+    if (content !== undefined) {
+      const contentError = validateRequiredString(content, 'content', 500);
+      if (contentError) errors.push(contentError);
+    }
+
+    if (columnId !== undefined) {
+      const columnIdError = validateNumber(columnId, 'columnId', 1);
+      if (columnIdError) errors.push(columnIdError);
+    }
+
+    if (position !== undefined) {
+      const positionError = validateNumber(position, 'position', 0);
+      if (positionError) errors.push(positionError);
+    }
+
+    if (errors.length > 0) {
+      return res.status(400).json({
+        error: 'Validation failed',
+        details: errors
+      });
+    }
 
     const setClauses: string[] = [];
     const args: (string | number)[] = [];
