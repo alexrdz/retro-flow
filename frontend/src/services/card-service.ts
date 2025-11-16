@@ -17,7 +17,7 @@ export async function getCardsForSession(sessionId: string) {
   }
 }
 
-export async function createCard(card: Omit<Card, 'id'>) {
+export async function createCard(card: Omit<Card, 'id' | 'createdAt'>) {
   const { sessionId, content, columnId, position } = card
 
   try {

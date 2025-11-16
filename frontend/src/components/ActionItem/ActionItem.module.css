@@ -1,0 +1,70 @@
+.action-item {
+    background: var(--surface-2);
+    border-radius: var(--radius-2);
+    padding: var(--size-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-2);
+  }
+
+  .action-item-content h3 {
+    margin: 0;
+    font-size: var(--font-size-2);
+    font-weight: var(--font-weight-6);
+  }
+
+  .description {
+    margin: var(--size-2) 0 0 0;
+    color: var(--text-2);
+    font-size: var(--font-size-1);
+  }
+
+  .assignee {
+    margin: var(--size-2) 0 0 0;
+    display: flex;
+    align-items: center;
+    gap: var(--size-1);
+    font-size: var(--font-size-1);
+    color: var(--text-2);
+  }
+
+  .action-item-footer {
+    margin-top: var(--size-2);
+  }
+
+  .status-badge {
+    border: none;
+    padding: var(--size-1) var(--size-3);
+    border-radius: var(--radius-2);
+    font-size: var(--font-size-0);
+    font-weight: var(--font-weight-6);
+    cursor: pointer;
+    transition: opacity 0.2s;
+    color: white;
+  }
+
+  .status-badge:hover {
+    opacity: 0.8;
+  }
+
+  .delete-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: var(--size-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-2);
+    transition: background 0.2s;
+  }
+
+  .delete-button:hover {
+    background: var(--red-2);
+  }
+
+  .delete-button svg {
+    width: var(--size-4);
+    height: var(--size-4);
+    color: var(--red-7);
+  }

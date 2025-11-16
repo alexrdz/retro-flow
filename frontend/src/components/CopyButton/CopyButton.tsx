@@ -6,9 +6,9 @@ export default function CopyButton({ text }: { text: string }) {
   function handleCopy() {
     navigator.clipboard.writeText(text)
     if (checkRef.current) {
-      checkRef.current.classList.add('animated-fade-in')
+      checkRef.current.classList.add('animated-fade-in-out')
       setTimeout(() => {
-        checkRef.current!.classList.remove('animated-fade-in')
+        checkRef.current!.classList.remove('animated-fade-in-out')
       }, 3000)
     }
   }
@@ -22,6 +22,6 @@ export default function CopyButton({ text }: { text: string }) {
         </svg>
         <span className="sr-only">Copy</span>
     </button>
-    <div ref={checkRef} className={styles['copy-popover']}>✅</div>
+    <div ref={checkRef} className={styles['copy-popover']}><span className="column-indicator bg--green-6"></span> Copied!</div>
     </>
 }

@@ -3,9 +3,10 @@
   border-radius: 3px;
   transition: all 0.2s ease-in-out;
   box-shadow: 2px 2px 0 var(--stone-10);
+  transition: box-shadow 0.2s ease-in-out;
 
   &:hover {
-    box-shadow: 8px 8px 0 var(--stone-10);
+    box-shadow: 8px 8px 0 var(--color-link-primary);
     transform: scale(1.01);
   }
 
@@ -26,6 +27,12 @@
     background-color: transparent;
     position: relative;
     inset: 0;
+
+    &:focus {
+      outline: 2px solid;
+      outline-offset: -4px;
+      background-color: var(--input-bg-color);
+    }
   }
 
   footer {
@@ -55,16 +62,4 @@
       color: var(--color-link-primary);
     }
   }
-}
-
-.went_well {
-  --pill-bg-color: var(--pink-3);
-}
-
-.improve {
-  --pill-bg-color: var(--blue-3);
-}
-
-.actions {
-  --pill-bg-color: var(--green-3);
 }

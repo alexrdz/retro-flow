@@ -6,6 +6,12 @@
 }
 
 .copy-popover {
-  padding: var(--size-1);
+  padding: var(--size-1) var(--size-3);
+  position: absolute;
+  top: 2%;
+  right: 2%;
+  border-radius: 25rem;
+  background-color: var(--stone-10);
+  color: var(--stone-1);
   opacity: 0;
 }

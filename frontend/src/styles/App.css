@@ -8,6 +8,13 @@ html, body {
     block-size: 100%;
   }
 }
+
+button {
+  transition: background 0.2s;
+}
+button:hover {
+  background: var(--color-accent-text);
+}
 .column-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -38,11 +45,31 @@ html, body {
   --indicator-bg-color: var(--blue-6);
 }
 
+.error-banner {
+  padding: var(--size-3);
+  background: var(--red-2);
+  border: 2px solid var(--red-6);
+  border-radius: var(--radius-2);
+  color: var(--red-9);
+  margin-bottom: var(--size-3);
+
+  button {
+    margin-left: var(--size-3);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+  }
+}
+
 
 .animated-fade-in {
-  animation: fadeIn 2s ease-in-out;
+  animation: fadeIn 1s ease-in-out;
 }
-@keyframes fadeIn {
+.animated-fade-in-out {
+  animation: fadeInOut 2s ease-in-out;
+}
+@keyframes fadeInOut {
   0% {
     opacity: 0;
   }
@@ -57,5 +84,13 @@ html, body {
   }
   100% {
     opacity: 0;
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
