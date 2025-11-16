@@ -4,23 +4,49 @@ export interface Session {
     createdAt: string;
 }
 
+export interface Column {
+  id: number;
+  sessionId: string;
+  name: string;
+  position: number;
+  color: string;
+  createdAt: string;
+}
+
 export interface Card {
     id: number;
     sessionId: string;
     content: string;
-    columnType: ColumnType;
+    columnId: number;
     position: number;
     createdAt: string;
 }
 
-export type ColumnType = 'went_well' | 'improve' | 'actions';
-export const ColumnType = {
-  WENT_WELL: 'went_well' as ColumnType,
-  IMPROVE: 'improve' as ColumnType,
-  ACTIONS: 'actions' as ColumnType,
-} as const;
+export interface ActionItem {
+    id: number;
+    sessionId: string;
+    title: string;
+    description?: string;
+    assignedTo?: string;
+    status: 'pending' | 'in_progress' | 'completed';
+    createdAt: string;
+}
 
 
 export type CardFormData = {
   content: string;
 };
+
+export type ActionItemFormData = {
+  title: string;
+  description?: string;
+  assignedTo?: string;
+};
+
+// api request types
+export interface SessionData {
+  session: Session;
+  columns: Column[];
+  cards: Card[];
+  actionItems: ActionItem[];
+}

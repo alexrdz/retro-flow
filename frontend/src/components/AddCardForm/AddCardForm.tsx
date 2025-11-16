@@ -1,25 +1,24 @@
 import { useForm } from "react-hook-form"
-import type { CardFormData, ColumnType, Card } from "../../types"
+import type { CardFormData, Card } from "../../types"
 import styles from "./AddCardForm.module.css"
 import { useState } from "react"
 interface AddCardFormProps {
-  columnType: ColumnType
+  columnId: number
   onCardCreated: () => void
-  onCardAdded: (newCard: Omit<Card, 'id'>) => Promise<Card>
+  onCardAdded: (newCard: Omit<Card, 'id' | 'createdAt'>) => Promise<Card>
   sessionId: string
 }
 
-export default function AddCardForm({columnType, onCardCreated, onCardAdded, sessionId}: AddCardFormProps) {
+export default function AddCardForm({columnId, onCardCreated, onCardAdded, sessionId}: AddCardFormProps) {
   const [loading, setLoading] = useState(false)
   const { register, handleSubmit, reset, formState: { errors } } = useForm<CardFormData>()
 
   async function onFormSubmit(data: CardFormData) {
-    const newCard: Omit<Card, 'id'> = {
+    const newCard: Omit<Card, 'id' | 'createdAt'> = {
       sessionId: sessionId,
       content: data.content,
-      columnType: columnType,
+      columnId: columnId,
       position: 1,
-      createdAt: new Date().toISOString()
     }
 
     try {
