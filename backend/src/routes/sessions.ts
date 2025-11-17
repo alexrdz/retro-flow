@@ -15,6 +15,8 @@ router.post('/', async (req: express.Request, res: express.Response) => {
   try {
     const id = nanoid();
     const { name }: CreateSessionRequest | { name: string } = req.body || { name: 'session-' + id };
+    const createdBy = req.body.username;
+
     let sessionName = name || `session-${id}`;
     if (sessionName) {
       const nameError = validateRequiredString(sessionName, 'name', 100);
@@ -26,8 +28,8 @@ router.post('/', async (req: express.Request, res: express.Response) => {
     const createdAt = new Date().toISOString();
 
     await turso.execute({
-      sql: 'INSERT INTO sessions (id, name, created_at) VALUES (?, ?, ?)',
-      args: [id, sessionName, createdAt]
+      sql: 'INSERT INTO sessions (id, name, created_by, created_at) VALUES (?, ?, ?, ?)',
+      args: [id, sessionName, createdBy, createdAt]
     });
 
     // default columns
@@ -44,6 +46,7 @@ router.post('/', async (req: express.Request, res: express.Response) => {
     const session: Session = {
       id,
       name: sessionName,
+      createdBy,
       createdAt
     };
 
@@ -59,7 +62,7 @@ router.get('/:id', async (req: express.Request, res: express.Response) => {
   try {
     const sessionID = req.params.id;
     const sessionResult = await turso.execute({
-      sql: 'SELECT id, name, created_at FROM sessions WHERE id = ?',
+      sql: 'SELECT id, name, created_by, created_at FROM sessions WHERE id = ?',
       args: [sessionID]
     });
 
@@ -71,7 +74,8 @@ router.get('/:id', async (req: express.Request, res: express.Response) => {
     const session: Session = {
       id: String(sessionRow.id),
       name: String(sessionRow.name),
-      createdAt: String(sessionRow.created_at)
+      createdBy: String(sessionRow.created_by),
+      createdAt: String(sessionRow.created_at),
     };
 
     // fetch columns for session

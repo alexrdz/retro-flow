@@ -14,15 +14,15 @@ export default function AddSessionForm() {
 
     async function onFormSubmit(data: AddSessionFormData) {
         try {
-          const username = data.username?.trim() || null;
+          const username = data.username?.trim();
           const showName = data.showName;
           setUserPreferences({ username, showUsername: showName });
 
-          const session = await createSession()
+          const session = await createSession(username);
 
-          navigate(`/session/${session.id}`)
+          navigate(`/session/${session.id}`);
         } catch (error) {
-          console.error(error)
+          console.error(error);
         }
     }
 

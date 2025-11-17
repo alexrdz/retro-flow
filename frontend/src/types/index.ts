@@ -1,7 +1,8 @@
 export interface Session {
-    id: string;
-    name: string;
-    createdAt: string;
+  id: string;
+  name: string;
+  createdAt: string;
+  createdBy: string;
 }
 
 export interface Column {

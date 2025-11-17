@@ -9,14 +9,20 @@ interface ActionItemsProps {
     onStatusChange: (id: number, newStatus: 'pending'
   | 'in_progress' | 'completed') => Promise<void>
     onDelete: (id: number) => Promise<void>
+    showForm: boolean
   }
 
 export default function ActionItems({
     actionItems,
     onAdd,
     onStatusChange,
-    onDelete
+    onDelete,
+    showForm,
   }: ActionItemsProps) {
+
+    if (!showForm) {
+      return null;
+    }
 
     // group action items by status
     const pending = actionItems.filter(item => item.status === 'pending')

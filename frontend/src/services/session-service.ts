@@ -1,9 +1,13 @@
 import { API_BASE_URL, getErrorMessage } from "./api";
 
-export async function createSession() {
+export async function createSession(username: string) {
   try {
     const response = await fetch(`${API_BASE_URL}/sessions`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username }),
     });
 
     if (!response.ok) {

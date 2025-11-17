@@ -27,6 +27,7 @@ export default function Session() {
       try {
         setLoading(true)
         const data = await getSession(sessionId)
+        console.log('data', data)
         setSessionData(data)
         setError(null)
       } catch (error) {
@@ -134,6 +135,9 @@ export default function Session() {
   async function removeCard(id: string) {
     const previousData = sessionData; // backup data for optimistic update
     const username = getUsername();
+    if (!username) {
+      throw new Error('Username not found');
+    }
 
     try {
       // optimistic update
@@ -301,6 +305,7 @@ export default function Session() {
         onAdd={addActionItem}
         onStatusChange={changeActionItemStatus}
         onDelete={removeActionItem}
+        showForm={username === sessionData.session.createdBy}
         />
 
     </div>
