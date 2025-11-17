@@ -12,7 +12,7 @@ interface JoinSessionFormData {
 
 export default function JoinSessionForm() {
   const navigate = useNavigate();
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<JoinSessionFormData>()
+  const { register, handleSubmit, formState: { errors } } = useForm<JoinSessionFormData>()
 
   async function onSubmit(data: JoinSessionFormData) {
     try {

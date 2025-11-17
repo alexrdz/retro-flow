@@ -10,7 +10,7 @@ interface AddSessionFormData {
 
 export default function AddSessionForm() {
     const navigate = useNavigate()
-    const { register, handleSubmit, reset, formState: { errors } } = useForm<AddSessionFormData>()
+    const { register, handleSubmit, formState: { errors } } = useForm<AddSessionFormData>()
 
     async function onFormSubmit(data: AddSessionFormData) {
         try {

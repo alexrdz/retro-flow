@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import type { Card } from "../types";
-import { createCard, deleteCard, getCardsForSession, updateCard as fetchUpdateCard  } from "../services/card-service";
+import { createCard, getCardsForSession, updateCard as fetchUpdateCard  } from "../services/card-service";
 
 export default function useCardService(sessionId: string) {
     const [cards, setCards] = useState<Card[]>([])
@@ -29,7 +29,7 @@ export default function useCardService(sessionId: string) {
 
     async function removeCard(id: string) {
       setCards((prevCards) => prevCards.filter((card) => String(card.id) !== id))
-      await deleteCard(id)
+      // await deleteCard(id)
     }
 
     async function updateCard(updatedCard: Card) {
