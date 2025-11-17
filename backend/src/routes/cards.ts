@@ -8,7 +8,7 @@ import { sanitizeString, validateNumber, validateRequiredString, ValidationError
 router.post('/', async (req: express.Request, res: express.Response) => {
   // curl -X POST http://localhost:3001/api/cards -H 'Content-Type: application/json' -d '{"content": "test"}'
     try {
-    const { sessionId, content, columnId, position }: CreateCardRequest = req.body;
+    const { sessionId, content, columnId, position, createdBy }: CreateCardRequest = req.body;
 
     const errors: ValidationError[] = [];
 
@@ -43,8 +43,8 @@ router.post('/', async (req: express.Request, res: express.Response) => {
 
     const timestamp = new Date().toISOString();
     const result = await turso.execute(
-      'INSERT INTO cards (session_id, content, column_id, position, created_at) VALUES (?, ?, ?, ?, ?)',
-      [sessionId, content, columnId, newPosition, timestamp]
+      'INSERT INTO cards (session_id, content, column_id, position, created_by, created_at) VALUES (?, ?, ?, ?, ?, ?)',
+      [sessionId, content, columnId, newPosition, createdBy || null, timestamp]
     );
 
     const newCardId = Number(result.lastInsertRowid);
@@ -54,6 +54,7 @@ router.post('/', async (req: express.Request, res: express.Response) => {
       content,
       columnId,
       position: newPosition,
+      createdBy: createdBy || undefined,
       createdAt: timestamp
     };
 
@@ -168,6 +169,7 @@ router.get('/', async (req: express.Request, res: express.Response) => {
       content: row.content,
       columnId: row.column_id,
       position: row.position,
+      createdBy: row.created_by || undefined,
       createdAt: row.created_at
     }));
 

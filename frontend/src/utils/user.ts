@@ -1,11 +1,30 @@
+import type { UserPreferences } from "../types";
+
+export function getUserPreferences(): UserPreferences | null {
+  const stored = localStorage.getItem('retro_user_prefs');
+  if (!stored) return null;
+
+  try {
+    return JSON.parse(stored);
+  } catch {
+    return null;
+  }
+}
+
+export function setUserPreferences(prefs: UserPreferences): void {
+  localStorage.setItem('retro_user_prefs', JSON.stringify(prefs));
+}
+
+export function clearUserPreferences(): void {
+  localStorage.removeItem('retro_user_prefs');
+}
+
 export function getUsername(): string | null {
-  return localStorage.getItem('retro_username');
+  const prefs = getUserPreferences();
+  return prefs?.username ?? null;
 }
 
-export function setUsername(username: string): void {
-  localStorage.setItem('retro_username', username);
-}
-
-export function clearUsername(): void {
-  localStorage.removeItem('retro_username');
+export function shouldShowUsername(): boolean {
+  const prefs = getUserPreferences();
+  return prefs?.showUsername ?? false;
 }

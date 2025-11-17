@@ -18,7 +18,7 @@ export async function getCardsForSession(sessionId: string) {
 }
 
 export async function createCard(card: Omit<Card, 'id' | 'createdAt'>) {
-  const { sessionId, content, columnId, position } = card
+  const { sessionId, content, columnId, position, createdBy } = card
 
   try {
     const response = await fetch(`${API_BASE_URL}/cards`, {
@@ -26,7 +26,7 @@ export async function createCard(card: Omit<Card, 'id' | 'createdAt'>) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ sessionId, content, columnId, position }),
+        body: JSON.stringify({ sessionId, content, columnId, position, createdBy }),
     });
 
     if (!response.ok) {

@@ -1,12 +1,13 @@
 import {useForm } from 'react-hook-form';
 import styles from './JoinSessionForm.module.css';
-import { setUsername } from '../../utils/user';
+import { setUserPreferences } from '../../utils/user';
 import { joinSession } from '../../services/session-service';
 import { useNavigate } from 'react-router-dom';
 
 interface JoinSessionFormData {
   username: string;
   sessionId: string;
+  sessionShowName: boolean;
 }
 
 export default function JoinSessionForm() {
@@ -15,11 +16,13 @@ export default function JoinSessionForm() {
 
   async function onSubmit(data: JoinSessionFormData) {
     try {
-      const username = data.username;
+      const username = data.username?.trim() || null;
       const sessionId = data.sessionId;
+      const sessionShowName = data.sessionShowName;
 
-      setUsername(username);
-      const session = await joinSession(sessionId, username);
+      setUserPreferences({ username, showUsername: sessionShowName });
+
+      const session = await joinSession(sessionId, username || null);
       if (session) {
         navigate(`/session/${sessionId}`);
       }
@@ -29,13 +32,18 @@ export default function JoinSessionForm() {
   }
 
     return (
-      <div className={styles['join-session-form']} data-center="center:text">
+      <form onSubmit={handleSubmit(onSubmit)} data-stack="gap:sm" className="session-form">
         <p>Join an existing session</p>
-        <form onSubmit={handleSubmit(onSubmit)} data-cluster="align:center">
-          <input type="text" placeholder='username' {...register('username')} />
-          <input type="text" placeholder='session id' {...register('sessionId')} />
-          <button>Join</button>
-        </form>
-      </div>
+        <input type="text" placeholder='username' {...register('username')} />
+        <input type="text" placeholder='session id'
+          {...register('sessionId', { required: true })}
+          className={errors.sessionId ? styles.error : ''}
+        />
+        <label htmlFor="sessionShowName" data-cluster="align:center">
+          <input type="checkbox" id="sessionShowName" {...register('sessionShowName')} />
+          Show my name on cards
+        </label>
+        <button>Join</button>
+      </form>
     );
 }

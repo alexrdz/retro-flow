@@ -12,6 +12,7 @@ import { createActionItem, updateActionItem, deleteActionItem } from '../../serv
 import type { ActionItemFormData } from '../../types'
 import ErrorBanner from '../ErrorBanner/ErrorBanner'
 import { getUsername } from '../../utils/user'
+import { socketService } from '../../services/socket-service'
 
 export default function Session() {
   const sessionId = useLocation().pathname.split('/').pop() ?? ''
@@ -35,7 +36,21 @@ export default function Session() {
       }
     }
     fetchSession()
-  }, [sessionId])
+
+
+    socketService.connect();
+    const username = getUsername();
+    if (sessionId) {
+      socketService.joinSession(sessionId, username || 'anonymous');
+    }
+
+  return () => {
+    if (sessionId) {
+      socketService.leaveSession(sessionId);
+    }
+  };
+  }, [sessionId]);
+
 
   useEffect(() => {
     const username = getUsername();
@@ -44,14 +59,69 @@ export default function Session() {
     }
   }, [])
 
+
+  useEffect(() => {
+  socketService.connect();
+
+  const username = getUsername();
+  if (username && sessionId) {
+    socketService.joinSession(sessionId, username);
+  }
+
+  return () => {
+    if (sessionId) {
+      socketService.leaveSession(sessionId);
+    }
+  };
+}, [sessionId]);
+
+
+  useEffect(() => {
+  // listen for cards created by others
+  socketService.onCardCreated((card) => {
+    setSessionData((prev) => prev ? {
+      ...prev,
+      cards: [...prev.cards, card]
+    } : null);
+  });
+
+  // listen for cards updated by others
+  socketService.onCardUpdated((card) => {
+    setSessionData((prev) => prev ? {
+      ...prev,
+      cards: prev.cards.map((c) => c.id === card.id ? card : c)
+    } : null);
+  });
+
+  // listen for cards deleted by others
+  socketService.onCardDeleted(({ cardId }) => {
+    setSessionData((prev) => prev ? {
+      ...prev,
+      cards: prev.cards.filter((c) => c.id !== cardId)
+    } : null);
+  });
+
+  // cleanup listeners on unmount
+  return () => {
+    socketService.offCardCreated();
+    socketService.offCardUpdated();
+    socketService.offCardDeleted();
+  };
+}, []);
+
+
   async function addCard(newCard: Omit<Card, 'id' | 'createdAt'>): Promise<Card> {
     try {
       const createdCard = await createCard(newCard);
-      // optimistic update
+      // update local state
       setSessionData((prev) => prev ? {
         ...prev,
         cards: [...prev.cards, createdCard]
       } : null);
+
+      // broadcast to other users
+      socketService.emitCardCreated(sessionId, createdCard);
+
       setOperationError(null);
       return createdCard;
     } catch (error) {
@@ -70,6 +140,10 @@ export default function Session() {
         cards: prev.cards.filter(card => String(card.id) !== id)
       } : null);
       await deleteCard(id);
+
+      // broadcast to other users
+      socketService.emitCardDeleted(sessionId, Number(id));
+
       setOperationError(null);
     } catch (error) {
       setSessionData(previousData); // rollback!
@@ -87,6 +161,9 @@ export default function Session() {
         ...prev,
         cards: prev.cards.map(card => String(card.id) === String(updatedCard.id) ? updatedCard : card)
       } : null);
+
+      // broadcast to other users
+      socketService.emitCardUpdated(sessionId, updatedCard);
 
       await updateCardService(updatedCard);
       setOperationError(null);

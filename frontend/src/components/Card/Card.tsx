@@ -9,7 +9,7 @@ interface CardProps {
 
 export default function Card({card, removeCard, updateCard}: CardProps) {
   const contentRef = useRef<HTMLDivElement>(null)
-  const { id, content } = card
+  const { id, content, createdBy } = card
 
   useEffect(() => {
     if (contentRef.current && contentRef.current.textContent !== content) {
@@ -43,6 +43,11 @@ export default function Card({card, removeCard, updateCard}: CardProps) {
       </article>
 
       <footer className="card-footer" data-cluster="gap:sm align:center justify:space-between">
+        {createdBy && (
+          <span className={styles['created-by']}>
+            👤 {createdBy}
+          </span>
+        )}
         <div data-cluster="align:center">
           <button className={styles['card-footer-button']} onClick={() => removeCard(String(id))}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">

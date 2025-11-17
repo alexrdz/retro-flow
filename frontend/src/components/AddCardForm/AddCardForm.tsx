@@ -1,12 +1,13 @@
-import { useForm } from "react-hook-form"
-import type { CardFormData, Card } from "../../types"
-import styles from "./AddCardForm.module.css"
-import { useState } from "react"
+import { useForm } from "react-hook-form";
+import type { CardFormData, Card } from "../../types";
+import styles from "./AddCardForm.module.css";
+import { useState } from "react";
+import { getUsername, shouldShowUsername } from "../../utils/user";
 interface AddCardFormProps {
-  columnId: number
-  onCardCreated: () => void
-  onCardAdded: (newCard: Omit<Card, 'id' | 'createdAt'>) => Promise<Card>
-  sessionId: string
+  columnId: number;
+  onCardCreated: () => void;
+  onCardAdded: (newCard: Omit<Card, 'id' | 'createdAt'>) => Promise<Card>;
+  sessionId: string;
 }
 
 export default function AddCardForm({columnId, onCardCreated, onCardAdded, sessionId}: AddCardFormProps) {
@@ -14,11 +15,15 @@ export default function AddCardForm({columnId, onCardCreated, onCardAdded, sessi
   const { register, handleSubmit, reset, formState: { errors } } = useForm<CardFormData>()
 
   async function onFormSubmit(data: CardFormData) {
+    const username = getUsername() || null;
+    const createdBy = (shouldShowUsername() && username) ? username : undefined;
+
     const newCard: Omit<Card, 'id' | 'createdAt'> = {
       sessionId: sessionId,
       content: data.content,
       columnId: columnId,
       position: 1,
+      createdBy,
     }
 
     try {

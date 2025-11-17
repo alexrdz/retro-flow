@@ -1,15 +1,77 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import { Server } from 'socket.io';
+import { createServer } from 'http';
+
 import sessionRoutes from './routes/sessions';
 import cardRoutes from './routes/cards';
 import actionItemRoutes from './routes/action-items';
+
 
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3001;
+
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: 'http://localhost:5173',
+    credentials: true
+  }
+});
+
+// Socket.io event handlers
+io.on('connection', (socket) => {
+  console.log('User connected:', socket.id);
+
+  // Join session room
+  socket.on('join-session', (sessionId: string, username: string) => {
+    socket.join(sessionId);
+    socket.data.sessionId = sessionId;
+    socket.data.username = username;
+
+    // Notify others in room
+    socket.to(sessionId).emit('user-joined', { username });
+    console.log(`${username} joined session ${sessionId}`);
+  });
+
+  // Leave session
+  socket.on('leave-session', (sessionId: string) => {
+    const username = socket.data.username;
+    socket.leave(sessionId);
+    socket.to(sessionId).emit('user-left', { username });
+  });
+
+  // Card events (real-time sync)
+  socket.on('card-created', (data) => {
+    socket.to(data.sessionId).emit('card-created', data.card);
+  });
+
+  socket.on('card-updated', (data) => {
+    socket.to(data.sessionId).emit('card-updated', data.card);
+  });
+
+  socket.on('card-deleted', (data) => {
+    socket.to(data.sessionId).emit('card-deleted', { cardId: data.cardId });
+  });
+
+  socket.on('disconnect', () => {
+    const username = socket.data.username;
+    const sessionId = socket.data.sessionId;
+    if (sessionId && username) {
+      socket.to(sessionId).emit('user-left', { username });
+    }
+    console.log('User disconnected:', socket.id);
+  });
+});
+
+
+
+
+
 
 app.use(cors({
   origin: 'http://localhost:5173', // Vite's default port
@@ -41,6 +103,11 @@ app.use((req, res) => {
     res.status(404).json({ error: 'Not found' });
 });
 
-app.listen(port, () => {
-    console.log(`server running on port ${port}`);
+// app.listen(port, () => {
+//     console.log(`server running on port ${port}`);
+// });
+
+// use httpServer to listen
+httpServer.listen(port, () => {
+  console.log(`server running on port ${port}`);
 });

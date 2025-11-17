@@ -155,7 +155,7 @@ router.delete('/:id', async (req: express.Request, res: express.Response) => {
     if (result.rowsAffected === 0) {
       return res.status(404).json({ error: 'Session not found' });
     }
-    console.log(result);
+
     res.json({ message: `Deleted session ${sessionID}` });
   } catch (error) {
     console.error(error);
@@ -179,7 +179,10 @@ router.post('/join/:id', async (req: express.Request, res: express.Response) => 
       return res.status(400).json({ error: 'User already in session' });
     }
 
-    participants.push(username);
+    if (username) {
+      participants.push(username);
+    }
+
     await turso.execute("UPDATE sessions SET participants = ? WHERE id = ?", [JSON.stringify(participants), sessionID]);
     res.json({ message: `Joined session ${sessionID}`, sessionId: sessionID });
 
