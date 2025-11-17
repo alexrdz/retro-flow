@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { Server } from 'socket.io';
 import { createServer } from 'http';
+import path from 'path';
 
 import sessionRoutes from './routes/sessions';
 import cardRoutes from './routes/cards';
@@ -102,6 +103,11 @@ app.use('/api/action-items', actionItemRoutes);
 app.use((req, res) => {
     res.status(404).json({ error: 'Not found' });
 });
+
+app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+// app.use('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'));
+// });
 
 // app.listen(port, () => {
 //     console.log(`server running on port ${port}`);

@@ -4,11 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "cd backend && pnpm install && pnpm run build",
+    "build": "cd frontend && pnpm install && pnpm run build && cd ../backend && pnpm install && pnpm run build",
     "start": "cd backend && pnpm start",
     "dev:backend": "cd backend && pnpm run dev",
     "dev:frontend": "cd frontend && pnpm run dev",
     "dev": "pnpm run dev:backend & pnpm run dev:frontend"
+  },
+  "engines": {
+    "node": "20"
   },
   "keywords": [],
   "author": "",
