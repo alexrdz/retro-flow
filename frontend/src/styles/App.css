@@ -45,6 +45,13 @@ button:hover {
 }
 
 
+.error-message {
+  color: var(--red-7);
+  font-size: var(--font-size-0);
+  margin: 0;
+}
+
+
 /* selector for class that starts with column-indicator- */
 .column-indicator {
   --indicator-bg-color: var(--stone-3);

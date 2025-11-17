@@ -1,4 +1,5 @@
 import type { Card } from "../../types"
+import { getUsername } from "../../utils/user"
 import styles from "./Card.module.css"
 import { useRef, useEffect } from "react"
 interface CardProps {
@@ -35,7 +36,7 @@ export default function Card({card, removeCard, updateCard}: CardProps) {
     <div className={styles.card}>
       <article>
         <div
-          contentEditable
+          contentEditable={getUsername() === card.createdBy}
           ref={contentRef}
           className={styles['card-textarea']}
           onBlur={handleBlur}
@@ -49,12 +50,15 @@ export default function Card({card, removeCard, updateCard}: CardProps) {
           </span>
         )}
         <div data-cluster="align:center">
+          {getUsername() === card.createdBy ?
+
           <button className={styles['card-footer-button']} onClick={() => removeCard(String(id))}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>
             <span className="sr-only">delete</span>
           </button>
+          : null}
         </div>
       </footer>
     </div>

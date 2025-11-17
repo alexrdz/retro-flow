@@ -23,29 +23,29 @@ const io = new Server(httpServer, {
   }
 });
 
-// Socket.io event handlers
+// socket.io event handlers
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 
-  // Join session room
+  // join session room
   socket.on('join-session', (sessionId: string, username: string) => {
     socket.join(sessionId);
     socket.data.sessionId = sessionId;
     socket.data.username = username;
 
-    // Notify others in room
+    // notify others in room
     socket.to(sessionId).emit('user-joined', { username });
     console.log(`${username} joined session ${sessionId}`);
   });
 
-  // Leave session
+  // leave session
   socket.on('leave-session', (sessionId: string) => {
     const username = socket.data.username;
     socket.leave(sessionId);
     socket.to(sessionId).emit('user-left', { username });
   });
 
-  // Card events (real-time sync)
+  // card events (real-time sync)
   socket.on('card-created', (data) => {
     socket.to(data.sessionId).emit('card-created', data.card);
   });

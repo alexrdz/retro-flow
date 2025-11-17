@@ -1,34 +1,38 @@
 .home {
-  border: 1px solid var(--stone-3);
   padding: var(--size-12) var(--size-8);
+
   div {
     inline-size: 100%;
+    position: relative;
 
     &:before {
       content: '';
       border-inline-start: 1px solid var(--stone-3);
       position: absolute;
-      block-size: var(--size-12);
+      block-size: 100%;
       inline-size: 1px;
       background-color: var(--stone-3);
       left: 50%;
-      top: 50%;
+      top: 0;
+    }
+
+    &:after {
+      content: '';
+      border: 1px solid var(--stone-3);
+      position: absolute;
+      block-size: var(--size-6);
+      inline-size: var(--size-6);
+      border-radius: 50%;
+      border: 2px solid var(--stone-3);
+      background-color: var(--stone-1);
+      right: calc(50% - var(--size-3));
+      top: calc(50% - var(--size-3));
+      outline: 8px solid var(--stone-1);
     }
   }
 }
 
-p {
-  small {
-    border-radius: 25rem;
-    border: 1px solid var(--stone-3);
-    outline: 1px solid white;
-    padding: var(--size-1) var(--size-4);
-    background-color: var(--stone-2);
-    inline-size: fit-content;
-    display: block;
-    margin-inline: auto;
-  }
-}
+
 
 .split-container {
   /* make this an intrinsic container - no media queries but break at < 700px */

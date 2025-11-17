@@ -34,11 +34,13 @@ export default function JoinSessionForm() {
     return (
       <form onSubmit={handleSubmit(onSubmit)} data-stack="gap:sm" className="session-form">
         <p>Join an existing session</p>
-        <input type="text" placeholder='username' {...register('username')} />
+        <input type="text" placeholder='username' {...register('username', { required: 'Username is required' })} />
+        {errors.username && <p className="error-message">{errors.username.message}</p>}
         <input type="text" placeholder='session id'
-          {...register('sessionId', { required: true })}
+          {...register('sessionId', { required: 'Session ID is required' })}
           className={errors.sessionId ? styles.error : ''}
         />
+        {errors.sessionId && <p className="error-message">{errors.sessionId.message}</p>}
         <label htmlFor="sessionShowName" data-cluster="align:center">
           <input type="checkbox" id="sessionShowName" {...register('sessionShowName')} />
           Show my name on cards

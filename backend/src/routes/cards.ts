@@ -68,7 +68,7 @@ router.post('/', async (req: express.Request, res: express.Response) => {
 // PUT /api/cards/:id
 router.put('/:id', async (req: express.Request, res: express.Response) => {
   try {
-    const { id } = req.params;
+    const { id, username } = req.params;
     const { content, columnId, position }: UpdateCardRequest = req.body;
 
     const idError = validateNumber(id, 'id', 1);
@@ -119,10 +119,10 @@ router.put('/:id', async (req: express.Request, res: express.Response) => {
       return res.status(400).json({ error: 'No fields provided to update' });
     }
 
-    args.push(id);
+    args.push(id, username);
 
     const result = await turso.execute(
-      `UPDATE cards SET ${setClauses.join(', ')} WHERE id = ?`,
+      `UPDATE cards SET ${setClauses.join(', ')} WHERE id = ? AND created_by = ?`,
       args
     );
 
@@ -138,10 +138,10 @@ router.put('/:id', async (req: express.Request, res: express.Response) => {
 });
 
 // DELETE /api/cards/:id
-router.delete('/:id', async (req: express.Request, res: express.Response) => {
+router.delete('/:id/:username', async (req: express.Request, res: express.Response) => {
   try {
-    const { id } = req.params;
-    const result = await turso.execute("DELETE FROM cards WHERE id = ?", [id]);
+    const { id, username } = req.params;
+    const result = await turso.execute("DELETE FROM cards WHERE id = ? AND created_by = ?", [id, username]);
     if (result.rowsAffected === 0) {
       return res.status(404).json({ error: 'Card not found' });
     }

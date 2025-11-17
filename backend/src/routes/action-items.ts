@@ -34,7 +34,7 @@ router.post('/', async (req: express.Request, res: express.Response) => {
       const sanitizedDescription = description ? sanitizeString(description, 500) : null;
       const sanitizedAssignedTo = assignedTo ? sanitizeString(assignedTo, 100) : null;
 
-      // Validate required fields
+      // validate required fields
       if (!sessionId || !sanitizedTitle) {
         return res.status(400).json({ error: 'sessionId and title are required' });
       }

@@ -91,7 +91,7 @@ router.get('/:id', async (req: express.Request, res: express.Response) => {
 
     // fetch cards for session
     const cardsResult = await turso.execute({
-      sql: 'SELECT id, session_id, content, column_id, position, created_at FROM cards WHERE session_id = ?',
+      sql: 'SELECT id, session_id, content, column_id, position, created_by, created_at FROM cards WHERE session_id = ?',
       args: [sessionID]
     });
 
@@ -101,6 +101,7 @@ router.get('/:id', async (req: express.Request, res: express.Response) => {
       content: String(r.content),
       columnId: Number(r.column_id),
       position: Number(r.position),
+      createdBy: String(r.created_by),
       createdAt: String(r.created_at)
     }));
 

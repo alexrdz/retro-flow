@@ -133,13 +133,15 @@ export default function Session() {
 
   async function removeCard(id: string) {
     const previousData = sessionData; // backup data for optimistic update
+    const username = getUsername();
+
     try {
       // optimistic update
       setSessionData(prev => prev ? {
         ...prev,
         cards: prev.cards.filter(card => String(card.id) !== id)
       } : null);
-      await deleteCard(id);
+      await deleteCard(id, username);
 
       // broadcast to other users
       socketService.emitCardDeleted(sessionId, Number(id));
@@ -258,11 +260,11 @@ export default function Session() {
     <div className='app-container' data-container data-stack="gap:md">
       <header>
         <h1>hello, {username || 'user'}</h1>
-        <p>Welcome to Retro Session ID: {sessionId}</p>
+
         <div data-cluster="gap:sm align:center">
-          <p>Share this link with your team:</p>
-          <input style={{ flexGrow: 1  }} type="text" value={`http://localhost:5173/session/${sessionId}`} readOnly />
-          <CopyButton text={`http://localhost:5173/session/${sessionId}`} />
+          <p>Share this session's ID with your team:</p>
+          <input style={{ flexGrow: 1  }} type="text" value={sessionId} readOnly />
+          <CopyButton text={sessionId} />
         </div>
       </header>
 

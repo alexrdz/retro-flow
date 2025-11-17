@@ -19,9 +19,3 @@
 .form-field textarea.error {
   border-color: var(--red-6);
 }
-
-.error-message {
-  color: var(--red-7);
-  font-size: var(--font-size-0);
-  margin: 0;
-}

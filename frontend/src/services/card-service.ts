@@ -43,7 +43,7 @@ export async function createCard(card: Omit<Card, 'id' | 'createdAt'>) {
 
 
 export async function updateCard(card: Card) {
-  const { id, content, columnId, position } = card
+  const { id, content, columnId, position, createdBy } = card
 
   try {
     const response = await fetch(`${API_BASE_URL}/cards/${id}`, {
@@ -51,7 +51,7 @@ export async function updateCard(card: Card) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content, columnId, position }),
+        body: JSON.stringify({ content, columnId, position, createdBy }),
     });
 
     if (!response.ok) {
@@ -66,9 +66,9 @@ export async function updateCard(card: Card) {
   }
 }
 
-export async function deleteCard(id: string) {
+export async function deleteCard(id: string, username: string) {
   try {
-    const response = await fetch(`${API_BASE_URL}/cards/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/cards/${id}/${username}`, {
         method: 'DELETE',
     });
 
