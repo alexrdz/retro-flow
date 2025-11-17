@@ -7,7 +7,8 @@ class SocketService {
   connect() {
     if (this.socket) return;
 
-    this.socket = io('http://localhost:3001', {
+    const url = import.meta.env.DEV ? 'http://localhost:3001' : import.meta.env.VITE_API_URL;
+    this.socket = io(url, {
       withCredentials: true
     });
 
