@@ -25,6 +25,26 @@ button:hover {
   padding: var(--size-8);
 }
 
+.session-form {
+  padding: var(--size-8);
+
+  input {
+    border: 1px solid var(--stone-5);
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  label > input {
+    flex-grow: .125;
+  }
+
+  button {
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+  }
+}
+
+
 /* selector for class that starts with column-indicator- */
 .column-indicator {
   --indicator-bg-color: var(--stone-3);

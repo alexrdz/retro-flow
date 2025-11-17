@@ -34,14 +34,24 @@ export async function getSession(sessionId: string) {
   }
 }
 
-export async function joinSession(sessionId: string, username: string) {
+export async function joinSession(sessionId: string, username: string | null) {
   try {
+    const bodyData: { id: string; username?: string } = {
+      id: sessionId,
+    }
+
+    if (username) {
+      bodyData.username = username;
+    }
+    const bodyString = JSON.stringify(bodyData);
+    console.log(bodyString)
+
     const response = await fetch(`${API_BASE_URL}/sessions/join/${sessionId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id: sessionId, username }),
+      body: bodyString,
     });
 
     if (!response.ok) {

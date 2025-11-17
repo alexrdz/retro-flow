@@ -45,6 +45,7 @@ export interface CreateCardRequest {
   content: string;
   columnId: number;
   position: number;
+  createdBy?: string;
 }
 
 export interface UpdateCardRequest {

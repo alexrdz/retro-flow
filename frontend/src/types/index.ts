@@ -51,3 +51,8 @@ export interface SessionData {
   cards: Card[];
   actionItems: ActionItem[];
 }
+
+export interface UserPreferences {
+  username: string | null;
+  showUsername: boolean;
+}

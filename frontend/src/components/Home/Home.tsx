@@ -5,7 +5,10 @@ import JoinSessionForm from "../JoinSessionForm/JoinSessionForm";
 export default function Home() {
     return <section className={styles.home} data-stack="gap:md align:center">
       <p><small>No accounts needed</small></p>
-      <AddSessionForm />
-      <JoinSessionForm />
+
+      <div className={styles['split-container']}>
+        <AddSessionForm />
+        <JoinSessionForm />
+      </div>
     </section>
 }
