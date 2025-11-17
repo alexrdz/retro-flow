@@ -19,7 +19,9 @@ const port = process.env.PORT || 3001;
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin: process.env.NODE_ENV === 'production'
+      ? true
+      : 'http://localhost:5173',
     credentials: true
   }
 });
@@ -75,15 +77,12 @@ io.on('connection', (socket) => {
 
 
 app.use(cors({
-  origin: 'http://localhost:5173', // Vite's default port
+  origin: process.env.NODE_ENV === 'production'
+    ? true
+    : 'http://localhost:5173',
   credentials: true
 }));
 app.use(express.json());
-
-
-app.get('/', (req: Request, res: Response) => {
-    res.send('hola mundo!');
-});
 
 app.get('/api/health', (req: Request, res: Response) => {
     res.json({
@@ -99,15 +98,21 @@ app.use('/api/sessions', sessionRoutes);
 app.use('/api/cards', cardRoutes);
 app.use('/api/action-items', actionItemRoutes);
 
-// catch all 404s
-app.use((req, res) => {
-    res.status(404).json({ error: 'Not found' });
-});
+// serve static files in production
+if (process.env.NODE_ENV === 'production') {
+    const frontendPath = path.join(__dirname, '../../frontend/dist');
+    app.use(express.static(frontendPath));
 
-app.use(express.static(path.join(__dirname, '../../frontend/dist')));
-// app.use('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'));
-// });
+    // handle client-side routing - catch-all for non-api routes
+    app.use((req, res) => {
+      res.sendFile(path.join(frontendPath, 'index.html'));
+    });
+} else {
+    // 404 handler for dev only
+    app.use((req, res) => {
+        res.status(404).json({ error: 'Not found' });
+    });
+}
 
 // app.listen(port, () => {
 //     console.log(`server running on port ${port}`);
