@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import type { Card, SessionData } from "../types";
-import { createCard, getCardsForSession, updateCard as fetchUpdateCard  } from "../services/card-service";
 import { socketService } from "../services/socket-service";
 import { getUsername } from "../utils/user";
-import React from "react";
 
 interface CardServiceProps {
   sessionId: string,
