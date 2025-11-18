@@ -1,5 +1,4 @@
 import {useForm } from 'react-hook-form';
-import styles from './JoinSessionForm.module.css';
 import { setUserPreferences } from '../../utils/user';
 import { joinSession } from '../../services/session-service';
 import { useNavigate } from 'react-router-dom';
@@ -34,15 +33,15 @@ export default function JoinSessionForm() {
     return (
       <form onSubmit={handleSubmit(onSubmit)} data-stack="gap:sm" className="session-form">
         <p>Join an existing session</p>
-        <input 
-          type="text" 
-          placeholder='username' 
+        <input
+          type="text"
+          placeholder='username'
           className={errors.username ? 'error' : ''}
-          {...register('username', { required: 'Username is required' })} 
+          {...register('username', { required: 'Username is required' })}
         />
         {errors.username && <p className="error-message">{errors.username.message}</p>}
-        <input 
-          type="text" 
+        <input
+          type="text"
           placeholder='session id'
           className={errors.sessionId ? 'error' : ''}
           {...register('sessionId', { required: 'Session ID is required' })}
