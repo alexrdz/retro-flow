@@ -1,0 +1,47 @@
+.container {
+  background: var(--stone-2);
+  padding: var(--size-4);
+  border-radius: var(--radius-2);
+  margin-bottom: var(--size-4);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  color: var(--stone-9);
+}
+
+.toggle-button {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+}
+
+.user-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  font-size: 0.875rem;
+}
+
+.user-name {
+  font-weight: normal;
+}
+
+.user-name.currentUser {
+  font-weight: bold;
+}
