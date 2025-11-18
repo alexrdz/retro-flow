@@ -4,6 +4,12 @@ import dotenv from "dotenv";
 import { Server } from 'socket.io';
 import { createServer } from 'http';
 import path from 'path';
+import {
+  addUserToSession,
+  removeUserFromSession,
+  getPresenceState,
+  setUserReady
+} from './presence-store';
 
 import sessionRoutes from './routes/sessions';
 import cardRoutes from './routes/cards';
@@ -36,6 +42,11 @@ io.on('connection', (socket) => {
     socket.data.sessionId = sessionId;
     socket.data.username = username;
 
+    addUserToSession(sessionId, username, socket.id);
+
+    const presenceState = getPresenceState(sessionId);
+    socket.emit('presence-update', presenceState);
+
     // notify others in room
     socket.to(sessionId).emit('user-joined', { username });
     console.log(`${username} joined session ${sessionId}`);
@@ -53,6 +64,20 @@ io.on('connection', (socket) => {
     socket.to(data.sessionId).emit('card-created', data.card);
   });
 
+  socket.on('mark-ready', (sessionId: string, username: string, isReady: boolean) => {
+    setUserReady(sessionId, username, isReady);
+
+    // broadcast updated ready list to everyone in session
+    const readyUsers = getPresenceState(sessionId).readyUsers;
+    io.to(sessionId).emit('ready-status-changed', {
+      username,
+      isReady,
+      readyUsers
+    });
+
+    console.log(`${username} marked as ${isReady ? 'done' : 'working'} in ${sessionId}`);
+  });
+
   socket.on('card-updated', (data) => {
     socket.to(data.sessionId).emit('card-updated', data.card);
   });
@@ -62,12 +87,26 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    const username = socket.data.username;
-    const sessionId = socket.data.sessionId;
-    if (sessionId && username) {
-      socket.to(sessionId).emit('user-left', { username });
+    const removed = removeUserFromSession(socket.id);
+
+    if (removed) {
+      const username = socket.data.username;
+      const sessionId = socket.data.sessionId;
+      if (sessionId && username) {
+        io.to(sessionId).emit('user-left', { username });
+      }
     }
     console.log('User disconnected:', socket.id);
+  });
+
+  socket.on('leave-session', (sessionId: string) => {
+    const username = socket.data.username;
+    socket.leave(sessionId);
+
+    const removed = removeUserFromSession(socket.id);
+    if (removed) {
+      socket.to(sessionId).emit('user-left', { username: removed.username });
+    }
   });
 });
 
