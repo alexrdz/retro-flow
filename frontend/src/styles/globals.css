@@ -1,6 +1,7 @@
 html, body {
   block-size: 100%;
   background-color: var(--stone-1);
+  font-family: 'Figtree', serif;
 
   #root {
     display: flex;
@@ -72,6 +73,13 @@ button:hover {
   border-radius: 50%;
   display: inline-block;
   background-color: var(--indicator-bg-color);
+
+}
+.status-indicator--hidden {
+  opacity: .75;
+}
+.status-indicator--done {
+  box-shadow: 0 0 8px -.015rem var(--indicator-bg-color);
 }
 
 .bg--green-6 {
@@ -80,6 +88,8 @@ button:hover {
 .bg--red-6 {
   --indicator-bg-color: var(--red-6);
 }
+
+.status-indicator--done,
 .bg--blue-6 {
   --indicator-bg-color: var(--blue-6);
 }

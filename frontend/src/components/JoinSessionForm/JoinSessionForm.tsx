@@ -1,4 +1,4 @@
-import {useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { setUserPreferences } from '../../utils/user';
 import { joinSession } from '../../services/session-service';
 import { useNavigate } from 'react-router-dom';

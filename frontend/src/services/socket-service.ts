@@ -105,6 +105,34 @@ class SocketService {
     if (!this.socket) return;
     this.socket.off('user-left');
   }
+
+  // presence events
+  markReady(sessionId: string, username: string, isReady: boolean) {
+    if (!this.socket) return;
+    this.socket.emit('mark-ready', sessionId, username, isReady);
+  }
+
+  // presence listeners
+  onPresenceUpdate(callback: (data: { onlineUsers: string[], readyUsers: string[] }) => void) {
+    if (!this.socket) return;
+    this.socket.on('presence-update', callback);
+  }
+
+  onReadyStatusChanged(callback: (data: { username: string, isReady: boolean, readyUsers: string[] }) => void) {
+    if (!this.socket) return;
+    this.socket.on('ready-status-changed', callback);
+  }
+
+  // cleanup
+  offPresenceUpdate() {
+    if (!this.socket) return;
+    this.socket.off('presence-update');
+  }
+
+  offReadyStatusChanged() {
+    if (!this.socket) return;
+    this.socket.off('ready-status-changed');
+  }
 }
 
 export const socketService = new SocketService();
