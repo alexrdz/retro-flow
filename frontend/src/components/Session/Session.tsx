@@ -27,7 +27,6 @@ export default function Session() {
       try {
         setLoading(true)
         const data = await getSession(sessionId)
-        console.log('data', data)
         setSessionData(data)
         setError(null)
       } catch (error) {
@@ -37,19 +36,6 @@ export default function Session() {
       }
     }
     fetchSession()
-
-
-    socketService.connect();
-    const username = getUsername();
-    if (sessionId) {
-      socketService.joinSession(sessionId, username || 'anonymous');
-    }
-
-  return () => {
-    if (sessionId) {
-      socketService.leaveSession(sessionId);
-    }
-  };
   }, [sessionId]);
 
 
@@ -58,23 +44,22 @@ export default function Session() {
     if (username) {
       setUsername(username);
     }
-  }, [])
+  }, []);
 
 
   useEffect(() => {
-  socketService.connect();
-
-  const username = getUsername();
-  if (username && sessionId) {
-    socketService.joinSession(sessionId, username);
-  }
+    socketService.connect();
+    const username = getUsername();
+    if (sessionId && username) {
+      socketService.joinSession(sessionId, username);
+    }
 
   return () => {
     if (sessionId) {
       socketService.leaveSession(sessionId);
     }
   };
-}, [sessionId]);
+  }, [sessionId]);
 
 
   useEffect(() => {
@@ -287,7 +272,7 @@ export default function Session() {
                   onCardAdded={addCard}
                   sessionId={sessionId}
                 >
-                  {columnCards.map((card) => (
+                  {columnCards.filter(card => card.createdBy === username).map((card) => (
                     <CardComponent
                       key={card.id}
                       card={card}

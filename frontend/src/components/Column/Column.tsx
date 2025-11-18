@@ -29,7 +29,7 @@ export default function Column({children, column, onCardAdded, sessionId}: Colum
       <div className={styles.column} data-container data-stack="gap:sm">
         {cardAdded && <p className={styles['card-added']}>✅ Card added!</p>}
         <h2 data-cluster="gap:sm align:center">
-          <span className={`column-indicator bg${column.color}`}></span>
+          <span className={`status-indicator bg${column.color}`}></span>
           {column.name}
         </h2>
         <AddCardForm

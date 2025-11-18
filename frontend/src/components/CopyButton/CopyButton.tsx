@@ -24,6 +24,6 @@ export default function CopyButton({ text }: { text: string }) {
         </svg>
         <span className="sr-only">Copy</span>
     </button>
-    <div ref={checkRef} className={styles['copy-popover']}><span className="column-indicator bg--green-6"></span> Copied!</div>
+    <div ref={checkRef} className={styles['copy-popover']}><span className="status-indicator bg--green-6"></span> Copied!</div>
     </>
 }

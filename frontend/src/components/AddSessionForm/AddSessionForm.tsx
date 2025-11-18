@@ -31,7 +31,12 @@ export default function AddSessionForm() {
           <p>
             Start a new retro session
           </p>
-          <input type="text" placeholder='username' {...register('username', { required: 'Username is required' })} />
+          <input 
+            type="text" 
+            placeholder='username' 
+            className={errors.username ? 'error' : ''}
+            {...register('username', { required: 'Username is required' })} 
+          />
           {errors.username && <p className="error-message">{errors.username.message}</p>}
           <label htmlFor="showName" data-cluster="align:center">
             <input type="checkbox" id="showName" {...register('showName')} />

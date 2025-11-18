@@ -32,7 +32,7 @@ export default function AddActionItemForm({onActionItemAdded }: AddActionItemFor
           <input
             id="title"
             type="text"
-            className={errors.title ? styles.error : ''}
+            className={errors.title ? 'error' : ''}
             {...register('title', {
               required: 'Title is required',
               maxLength: {
@@ -46,7 +46,7 @@ export default function AddActionItemForm({onActionItemAdded }: AddActionItemFor
             placeholder="What needs to be done?"
             maxLength={200}
           />
-          {errors.title && <p className={styles['error-message']}>{errors.title.message}</p>}
+          {errors.title && <p className="error-message">{errors.title.message}</p>}
         </div>
 
 

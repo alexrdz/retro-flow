@@ -42,9 +42,13 @@
     font-size: .75rem;
 
     > div {
-      margin-inline-start: auto;
+      --cluster-gap: .25rem;
     }
   }
+}
+
+.card-footer-button-container {
+  margin-inline-start: auto;
 }
 
 .card-footer-button {
@@ -62,4 +66,8 @@
       color: var(--color-link-primary);
     }
   }
+}
+
+.created-by-icon {
+  inline-size: var(--size-4);
 }

@@ -1,3 +1,30 @@
+html, body {
+  block-size: 100%;
+  background-color: var(--stone-1);
+
+  #root {
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+  }
+}
+
+button {
+  transition: background 0.2s;
+}
+button:hover {
+  background: var(--color-accent-text);
+}
+.column-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.app-container {
+  padding: var(--size-8);
+}
+
 .pill {
   background-color: var(--pill-bg-color);
   color: var(--pill-text-color);
@@ -21,4 +48,88 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+/* form error states */
+.error {
+  border-color: var(--red-6);
+  outline-color: var(--red-6);
+}
+
+.error-message {
+  color: var(--red-9);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}
+
+
+/* selector for class that starts with status-indicator- */
+.status-indicator {
+  --indicator-bg-color: var(--stone-3);
+  inline-size: .75rem;
+  block-size: .75rem;
+  border-radius: 50%;
+  display: inline-block;
+  background-color: var(--indicator-bg-color);
+}
+
+.bg--green-6 {
+  --indicator-bg-color: var(--green-6);
+}
+.bg--red-6 {
+  --indicator-bg-color: var(--red-6);
+}
+.bg--blue-6 {
+  --indicator-bg-color: var(--blue-6);
+}
+
+.error-banner {
+  padding: var(--size-3);
+  background: var(--red-2);
+  border: 2px solid var(--red-6);
+  border-radius: var(--radius-2);
+  color: var(--red-9);
+  margin-bottom: var(--size-3);
+
+  button {
+    margin-left: var(--size-3);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+  }
+}
+
+
+.animated-fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
+.animated-fade-in-out {
+  animation: fadeInOut 2s ease-in-out;
+}
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
