@@ -1,0 +1,69 @@
+[data-media] {
+  --media-padding: initial;
+  --media-gap: initial;
+  --justify: initial;
+  --align: initial;
+  /* ↓ Set the Flexbox context */
+  display: flex;
+  /* ↓ Enable wrapping */
+  flex-wrap: nowrap;
+  /* ↓ Set the space/gap */
+  gap: var(--media-gap, 0rem);
+  /* ↓ Choose your justification (flex-start is default) */
+  justify-content: var(--justify, flex-start);
+  /* ↓ Choose your alignment (flex-start is default) */
+  align-items: var(--align, flex-start);
+  padding: var(--media-padding);
+
+  > *:last-child {
+    flex: 1;
+  }
+}
+
+
+/* [data-media] > *:nth-child(2) {
+  --collapse: calc(var(--collapse-at) - var(--split-gap, 0rem));
+  --largest-width: calc(100% - max(0rem, var(--split-gap, 0rem)));
+  --media-min-width: initial;
+  flex-basis: calc(
+    (max(var(--collapse, 0rem), var(--largest-width)) - var(--largest-width)) * 999
+  );
+  min-inline-size: max(
+    min(var(--media-min-width, 0), 100%),
+    calc(var(--largest-width) * 0.5)
+  );
+  flex-grow: 999;
+} */
+
+
+[data-media~="reverse"] {
+  flex-direction: row-reverse;
+ }
+
+ [data-media~="spacing:sm"] [data-media] { margin-block-start: 1rem; }
+ [data-media~="spacing:md"] [data-media] { margin-block-start: 2rem; }
+ [data-media~="spacing:lg"] [data-media] { margin-block-start: 3rem; }
+
+
+
+[data-media~="justify:center"] { --justify: center; }
+[data-media~="justify:end"] { --justify: flex-end; }
+[data-media~="justify:around"] { --justify: space-around; }
+[data-media~="justify:between"] { --justify: space-between; }
+[data-media~="justify:evenly"] { --justify: space-evenly; }
+
+
+[data-media~="align:center"] { --align: center; }
+[data-media~="align:end"] { --align: flex-end; }
+[data-media~="align:start"] { --align: flex-start; }
+[data-media~="align:stretch"] { --align: flex-stretch; }
+
+
+[data-media~="gap:sm"] { --media-gap: var(--layout-media-gap-sm); }
+[data-media~="gap:md"] { --media-gap: var(--layout-media-gap-md); }
+[data-media~="gap:lg"] { --media-gap: var(--layout-media-gap-lg); }
+
+
+[data-media~="padding:sm"] { --media-padding: var(--layout-media-padding-sm) }
+[data-media~="padding:md"] { --media-padding: var(--layout-media-padding-md) }
+[data-media~="padding:lg"] { --media-padding: var(--layout-media-padding-lg) }

@@ -1,0 +1,29 @@
+[data-center] {
+  --center-padding-start: initial;
+  --center-padding-end: initial;
+  block-size: auto;
+  box-sizing: content-box;
+  display: flex;
+  flex-direction: column;
+  max-inline-size: 100%; /* need var */
+  margin-inline: auto;
+  padding-inline-start: var(--center-padding-start);
+  padding-inline-end: var(--center-padding-end);
+}
+
+[data-center~="center:children"] {
+  align-items: center;
+}
+[data-center~="center:text"] {
+  text-align: center;
+}
+[data-center~="center:vertically"] {
+  place-content: center;
+}
+
+
+/*
+andText text-align: center;
+gutters: 1rem;
+intrinsic - Center child elements based on their content width
+ */

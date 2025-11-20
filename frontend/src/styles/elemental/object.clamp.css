@@ -1,0 +1,25 @@
+[data-clamp] {
+  --clamp-padding: initial;
+  --width: initial;
+  /* min-inline-size: 100%; */
+  max-inline-size: var(--width, 100%);
+  padding-inline: var(--clamp-padding, 0rem);;
+}
+
+[data-clamp~="width:10%"] { --width: 10%; }
+[data-clamp~="width:20%"] { --width: 20%; }
+[data-clamp~="width:25%"] { --width: 25%; }
+[data-clamp~="width:30%"] { --width: 30%; }
+[data-clamp~="width:40%"] { --width: 40%; }
+[data-clamp~="width:50%"] { --width: 50%; }
+[data-clamp~="width:60%"] { --width: 60%; }
+[data-clamp~="width:70%"] { --width: 70%; }
+[data-clamp~="width:75%"] { --width: 75%; }
+[data-clamp~="width:80%"] { --width: 80%; }
+
+[data-clamp~="padding-inline:1"] { --clamp-padding: 1rem; }
+[data-clamp~="padding-inline:2"] { --clamp-padding: 2rem; }
+[data-clamp~="padding-inline:3"] { --clamp-padding: 3rem; }
+
+[data-clamp~="center"] { margin-inline: auto; }
+[data-clamp~="right"] { margin-left: auto; }

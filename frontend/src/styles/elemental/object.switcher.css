@@ -1,0 +1,31 @@
+
+[data-switcher] {
+  --switcher-gap: initial;
+  --collapse-at: initial;
+  display: flex;
+  flex-wrap: wrap;
+  /* ↓ The default value is the first point on the modular scale */
+  gap: var(--switcher-gap, 0rem);
+  /* ↓ The width at which the layout “breaks” */
+  --collapse-at: 30rem;
+}
+[data-switcher] > * {
+  /* ↓ Allow children to grow */
+  flex-grow: 1;
+  /* ↓ Switch the layout at the --collapse-at */
+  flex-basis: calc((var(--collapse-at) - 100%) * 666);
+}
+[data-switcher] > :nth-last-child(n+5),
+[data-switcher] > :nth-last-child(n+5) ~ * {
+  /* ↓ Switch to a vertical configuration if
+  there are more than 4 child elements */
+  flex-basis: 100%;
+}
+
+[data-switcher~="gap:sm"] { --switcher-gap: var(--layout-switcher-gap-sm); }
+[data-switcher~="gap:md"] { --switcher-gap: var(--layout-switcher-gap-md); }
+[data-switcher~="gap:lg"] { --switcher-gap: var(--layout-switcher-gap-lg); }
+
+[data-switcher~="collapse:sm"] { --collapse-at: var(--layout-switcher-collapse-sm); }
+[data-switcher~="collapse:md"] { --collapse-at: var(--layout-switcher-collapse-md); }
+[data-switcher~="collapse:lg"] { --collapse-at: var(--layout-switcher-collapse-lg); }

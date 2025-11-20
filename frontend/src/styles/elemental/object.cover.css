@@ -1,0 +1,41 @@
+[data-cover] {
+  --cover-padding: initial;
+  --block-size: initial;
+  /* ↓ Establish a columnal flex context */
+  display: flex;
+  flex-direction: column;
+  /* ↓ Set a minimum height to match the viewport height
+  (any minimum would be fine) */
+  block-size: 100%;
+  min-block-size: var(--block-size, 100%);
+  /* Set a padding value */
+  padding: var(--cover-padding);
+}
+[data-cover] > * {
+  --cover-margin: initial;
+  /* ↓ Give each child a top and bottom margin */
+  margin-block: var(--cover-margin);
+}
+[data-cover] > :first-child:not([data-cover-main]) {
+  /* ↓ Remove the top margin from the first-child
+  if it _doesn't_ match the centered element */
+  margin-block-start: 0;
+}
+[data-cover] > :last-child:not([data-cover-main]) {
+  /* ↓ Remove the bottom margin from the last-child
+  if it _doesn't_ match the centered element */
+  margin-block-end: 0;
+}
+[data-cover] > [data-cover-main] {
+  /* ↓ Center the centered element (h1 here)
+  in the available vertical space */
+  margin-block: auto;
+}
+[data-cover~="padding:sm"] { --cover-padding: var(--layout-cover-padding-sm); }
+[data-cover~="padding:md"] { --cover-padding: var(--layout-cover-padding-md); }
+[data-cover~="padding:lg"] { --cover-padding: var(--layout-cover-padding-lg); }
+
+[data-cover~="height:25"] { --block-size: 25vh; }
+[data-cover~="height:50"] { --block-size: 50vh; }
+[data-cover~="height:75"] { --block-size: 75vh; }
+[data-cover~="height:100"] { --block-size: 100vh; }

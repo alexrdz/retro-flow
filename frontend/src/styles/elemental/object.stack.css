@@ -1,0 +1,25 @@
+[data-stack] {
+  --stack-gap: intial;
+  --stack-align: intial;
+  /* ↓ The flex context */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: var(--stack-gap);
+  align-items: var(--stack-align);
+}
+
+[data-stack~="gap:sm"] { --stack-gap: var(--layout-stack-gap-sm); }
+[data-stack~="gap:md"] { --stack-gap: var(--layout-stack-gap-md); }
+[data-stack~="gap:lg"] { --stack-gap: var(--layout-stack-gap-lg); }
+
+[data-stack~="align:start"] { --stack-align: flex-start; }
+[data-stack~="align:center"] { --stack-align: center; }
+[data-stack~="align:end"] { --stack-align: flex-end; }
+
+
+
+[data-stack]:only-child {
+  /* ↓ `height` in horizontal-tb writing mode */
+  block-size: 100%;
+}
