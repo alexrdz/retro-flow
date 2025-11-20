@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 import { createSession } from "../../services/session-service"
 import { useForm } from "react-hook-form"
 import { setUserPreferences } from "../../utils/user";
+import styles from './AddSessionForm.module.css'
 
 interface AddSessionFormData {
   username: string;
@@ -27,15 +28,15 @@ export default function AddSessionForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit(onFormSubmit)} data-stack="gap:sm" className="session-form">
+        <form onSubmit={handleSubmit(onFormSubmit)} data-stack="gap:sm" className={styles['session-form']}>
           <p>
             Start a new retro session
           </p>
-          <input 
-            type="text" 
-            placeholder='username' 
+          <input
+            type="text"
+            placeholder='username'
             className={errors.username ? 'error' : ''}
-            {...register('username', { required: 'Username is required' })} 
+            {...register('username', { required: 'Username is required' })}
           />
           {errors.username && <p className="error-message">{errors.username.message}</p>}
           <label htmlFor="showName" data-cluster="align:center">

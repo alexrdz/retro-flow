@@ -39,7 +39,7 @@ video {
   margin-block-end: initial;
 }
 
-html, input, select, button {
+html, body, input, select, button {
   font-family: var(--font-sans);
 }
 

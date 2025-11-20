@@ -6,8 +6,11 @@
   --measure: 65ch;
 
   /* Fonts */
+  /* block-size: 100%;
+  background-color: var(--stone-1); */
+
 	--font--serif: Georgia, 'Times New Roman', Times, serif;
-	--font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+	--font-sans: 'Figtree', sans-serif;
 	--font-mono: Consolas, monaco, 'Ubuntu Mono', 'Liberation Mono', 'Courier New', Courier, monospace;
   --default-headline-font-weight: 300;
   --default-font-weight: 400;

@@ -1,10 +1,6 @@
 @layer settings, reset, vendor, elements, objects, components, app, utils;
-/*
-add vendor css in the appropriate layer
-@shoealce is added as a dev dependency should you want to use it
-@import url('@shoelace-style/shoelace/dist/themes/light.css') layer(vendor);
-*/
 @import url('./elemental/settings.css') layer(settings);
+
 /*
 Reset based on Josh Comeau’s [CSS Reset](https://www.joshwcomeau.com/css/custom-css-reset/)
 Currently this is a lot of the same as the elments.css file so not adding it here.
@@ -13,5 +9,10 @@ Currently this is a lot of the same as the elments.css file so not adding it her
 @import url('./elemental/elements.css') layer(elements);
 @import url('./elemental/objects.css') layer(objects);
 @import url('./elemental/utils.css') layer(utils);
-@import url('./App.css') layer(app);
+
 @import url('./globals.css') layer(utils);
+
+/* override open props font */
+:root {
+  --font-sans: 'Figtree', sans-serif;
+}
