@@ -1,5 +1,5 @@
 .container {
-  background: var(--stone-2);
+  background: var(--stone-1);
   padding: var(--size-4);
   border-radius: var(--radius-2);
   margin-bottom: var(--size-4);
@@ -14,14 +14,14 @@
 
 .title {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: var(--step--1);
   text-transform: uppercase;
   color: var(--stone-9);
 }
 
 .toggle-button {
-  font-size: 0.75rem;
-  padding: 0.25rem 0.75rem;
+  font-size: var(--step--1);
+  padding: var(--size-1) var(--size-2);
 }
 
 .user-list {
@@ -33,9 +33,9 @@
 .user-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.25rem 0;
-  font-size: 0.875rem;
+  gap: var(--size-2);
+  padding: var(--size-1) var(--size-2);
+  font-size: var(--step--1);
 }
 
 .user-name {

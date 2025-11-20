@@ -19,6 +19,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
       <main>
         {children}
       </main>
-      <footer className={styles['app-footer']}>footer</footer>
+      <footer data-stack="gap:1" data-center="center:children center:text" className={styles['app-footer']}>
+        <div data-cluster="justify:center">
+          <a href="https://en.wikipedia.org/wiki/Iguala_mass_kidnapping" target="_blank">43</a>
+        </div>
+      </footer>
     </div>
 }

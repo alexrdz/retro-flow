@@ -46,22 +46,22 @@ export default function Session() {
   }
 
   if (loading) {
-    return <div className='app-container'><p>Loading...</p></div>
+    return <div className='session-container'><p>Loading...</p></div>
   }
 
   if (error) {
-    return <div className='app-container'><p>Error: {error}</p></div>
+    return <div className='session-container'><p>Error: {error}</p></div>
   }
 
   if (!sessionData) {
-    return <div className='app-container'><p>Session not found</p></div>
+    return <div className='session-container'><p>Session not found</p></div>
   }
 
 
 
 
   return (
-    <div className='app-container' data-container data-stack="gap:md">
+    <div className='session-container' data-container data-stack="gap:md">
       <header>
         <h1>hello, {username || 'user'}</h1>
 

@@ -22,8 +22,8 @@ button:hover {
   gap: 1rem;
 }
 
-.app-container {
-  padding: var(--size-8);
+.session-container {
+  padding: var(--space-l);
 }
 
 .pill {

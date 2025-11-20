@@ -1,16 +1,16 @@
 .app-container {
   block-size: 100%;
-  display: grid;
-  grid-template-rows: 105px 1fr 1fr;
+  /* padding: var(--space-m); */
+
 }
 .app-header {
   background-color: #f9f9f9;
   border-block-end: 1px solid var(--stone-3);
-  padding: var(--size-4) var(--size-8);
+  padding: var(--space-m) var(--space-l);
 }
 
 .app-header-title {
-  font-size: var(--font-size-3);
+  font-size: var(--step-1);
   font-weight: var(--font-weight-8);
   text-transform: uppercase;
 }
@@ -22,5 +22,5 @@
 .app-footer {
   border-block-start: 1px solid var(--stone-3);
   margin-block-start: auto;
-  padding: var(--size-4) var(--size-8);
+  padding: var(--space-m) var(--space-l);
 }
